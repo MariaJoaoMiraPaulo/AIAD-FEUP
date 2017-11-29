@@ -20,6 +20,5 @@ public class GuidedDriverAgent extends Agent {
 	@Override
 	protected void setup() {
 		super.setup();
-		System.out.println("Atãoooooooooooooo eu gosto de guiar para um sitio certos");
 	}
 }

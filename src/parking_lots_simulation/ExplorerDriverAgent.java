@@ -20,7 +20,6 @@ public class ExplorerDriverAgent extends Agent {
 	@Override
 	protected void setup() {
 		super.setup();
-		System.out.println("Atãoooooooooooooo eu gosto de explorar");
 	}
 
 }
