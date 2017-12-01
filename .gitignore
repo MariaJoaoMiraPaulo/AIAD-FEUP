@@ -49,3 +49,5 @@ velocity.log
 .cache-main
 .scala_dependencies
 .worksheet
+
+.settings/*

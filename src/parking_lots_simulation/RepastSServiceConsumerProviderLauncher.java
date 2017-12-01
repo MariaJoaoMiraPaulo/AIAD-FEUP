@@ -1,5 +1,7 @@
 package parking_lots_simulation;
 
+import java.util.ArrayList;
+
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
@@ -16,10 +18,12 @@ import sajas.wrapper.ContainerController;
 
 public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 
+	private static final int N_STATIC_PARKING_FACILITY = 5;
 	private static int N_EXPLORER_DRIVERS = 10;
 	private static int N_GUIDED_DRIVERS = 10;
 	private static int GRID_WIDTH_SIZE = 50;
 	private static int GRID_HEIGHT_SIZE = 50;
+	private static ArrayList<StaticParkingFacilityAgent> staticParkingFacilities = new ArrayList<>();
 
 	private ContainerController mainContainer;
 	
@@ -32,7 +36,6 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 
 	@Override
 	protected void launchJADE() {
-
 		Runtime rt = Runtime.instance();
 		Profile p1 = new ProfileImpl();
 		mainContainer = rt.createMainContainer(p1);
@@ -42,7 +45,6 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 	
 	@Override
 	public Context build(Context<Object> context) {
-		
 		GridFactory  factory = GridFactoryFinder.createGridFactory(null);
 		GridBuilderParameters<Object> gridBuilderParameters = new GridBuilderParameters<Object>(new StrictBorders(), 
 				new RandomGridAdder<Object>(), true, GRID_WIDTH_SIZE, GRID_HEIGHT_SIZE);
@@ -52,9 +54,13 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 	}
 
 	public void launchAgents() {
-
 		try {
 			
+			for (int i = 0; i < N_STATIC_PARKING_FACILITY; i++) {
+				StaticParkingFacilityAgent spf = new StaticParkingFacilityAgent();
+				staticParkingFacilities.add(spf);
+				mainContainer.acceptNewAgent("StaticParkingFacility" + i, spf).start();
+			}
 			// create explorer driver agents
 			for (int i = 0; i < N_EXPLORER_DRIVERS; i++) {
 				ExplorerDriverAgent ed = new ExplorerDriverAgent();
@@ -63,7 +69,7 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 
 			// create guided driver agents
 			for (int i = 0; i < N_GUIDED_DRIVERS; i++) {
-				GuidedDriverAgent gd = new GuidedDriverAgent();
+				GuidedDriverAgent gd = new GuidedDriverAgent(mainGrid, staticParkingFacilities);
 				mainContainer.acceptNewAgent("GuidedDriver" + i, gd).start();
 			}
 
@@ -71,5 +77,4 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 			e.printStackTrace();
 		}
 	}
-
 }
