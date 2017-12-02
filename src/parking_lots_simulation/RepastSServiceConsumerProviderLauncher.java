@@ -8,8 +8,11 @@ import jade.wrapper.StaleProxyException;
 import parking_lots_simulation.behaviours.ExplorerDriverBehaviour;
 import parking_lots_simulation.behaviours.GuidedDriverBehaviour;
 import parking_lots_simulation.behaviours.StaticParkingFacilityBehaviour;
+import parking_lots_simulation.behaviours.DynamicParkingFacilityBehaviour;
 import parking_lots_simulation.debug.ExplorerDriverAgent;
 import parking_lots_simulation.debug.GuidedDriverAgent;
+import parking_lots_simulation.debug.StaticParkingFacilityAgent;
+import parking_lots_simulation.debug.DynamicParkingFacilityAgent;
 import repast.simphony.context.Context;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
@@ -24,6 +27,7 @@ import sajas.wrapper.ContainerController;
 public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 
 	private static final int N_STATIC_PARKING_FACILITY = 5;
+	private static final int N_DYNAMIC_PARKING_FACILITY = 5;
 	private static int N_EXPLORER_DRIVERS = 10;
 	private static int N_GUIDED_DRIVERS = 10;
 	private static int GRID_WIDTH_SIZE = 50;
@@ -61,11 +65,19 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 	public void launchAgents() {
 		try {
 			for (int i = 0; i < N_STATIC_PARKING_FACILITY; i++) {
-				ParkingFacilityAgent parkingFacility = new ParkingFacilityAgent();
-				parkingFacilities.add(parkingFacility);
-				parkingFacility.addBehaviour(new StaticParkingFacilityBehaviour());
-				mainContainer.acceptNewAgent("StaticParkingFacility" + i, parkingFacility).start();
+				StaticParkingFacilityAgent staticParkingFacility = new StaticParkingFacilityAgent();
+				parkingFacilities.add(staticParkingFacility);
+				staticParkingFacility.addBehaviour(new StaticParkingFacilityBehaviour());
+				mainContainer.acceptNewAgent("StaticParkingFacility" + i, staticParkingFacility).start();
 			}
+			
+			for (int i = 0; i < N_DYNAMIC_PARKING_FACILITY; i++) {
+				DynamicParkingFacilityAgent dynamicParkingFacility = new DynamicParkingFacilityAgent();
+				parkingFacilities.add(dynamicParkingFacility);
+				dynamicParkingFacility.addBehaviour(new DynamicParkingFacilityBehaviour());
+				mainContainer.acceptNewAgent("DynamicParkingFacility" + i, dynamicParkingFacility).start();
+			}
+			
 			// create explorer driver agents
 			for (int i = 0; i < N_EXPLORER_DRIVERS; i++) {
 				DriverAgent explorerDriver = new ExplorerDriverAgent();

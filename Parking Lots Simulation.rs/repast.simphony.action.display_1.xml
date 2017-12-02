@@ -16,13 +16,13 @@
     </entry>
     <entry>
       <string>parking_lots_simulation.debug.DynamicParkingFacilityAgent</string>
-      <string>repast.simphony.visualizationOGL2D.DefaultStyleOGL2D</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
   </styles>
   <editedStyles>
     <entry>
       <string>parking_lots_simulation.debug.StaticParkingFacilityAgent</string>
-      <string>parking_lots_simulation.debug.StaticParkingFacilityAgent.style_1.xml</string>
+      <string>parking_lots_simulation.debug.StaticParkingFacilityAgent.style_6.xml</string>
     </entry>
     <entry>
       <string>parking_lots_simulation.debug.ExplorerDriverAgent</string>
@@ -34,7 +34,7 @@
     </entry>
     <entry>
       <string>parking_lots_simulation.debug.DynamicParkingFacilityAgent</string>
-      <null/>
+      <string>parking_lots_simulation.debug.DynamicParkingFacilityAgent.style_1.xml</string>
     </entry>
   </editedStyles>
   <netStyles/>
@@ -47,7 +47,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>1467513863</hashCode>
+    <hashCode>1993963480</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
   <layoutProjection>Main Grid</layoutProjection>
@@ -59,15 +59,15 @@
     </entry>
     <entry>
       <string>parking_lots_simulation.debug.ExplorerDriverAgent</string>
-      <int>2</int>
+      <int>3</int>
     </entry>
     <entry>
       <string>parking_lots_simulation.debug.GuidedDriverAgent</string>
-      <int>1</int>
+      <int>2</int>
     </entry>
     <entry>
       <string>parking_lots_simulation.debug.DynamicParkingFacilityAgent</string>
-      <int>3</int>
+      <int>1</int>
     </entry>
   </layerOrder>
   <projections>
