@@ -64,6 +64,8 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 
 	public void launchAgents() {
 		try {
+			
+			// create static parking facilities
 			for (int i = 0; i < N_STATIC_PARKING_FACILITY; i++) {
 				StaticParkingFacilityAgent staticParkingFacility = new StaticParkingFacilityAgent();
 				parkingFacilities.add(staticParkingFacility);
@@ -71,6 +73,7 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 				mainContainer.acceptNewAgent("StaticParkingFacility" + i, staticParkingFacility).start();
 			}
 			
+			// create dynamic parking facilities
 			for (int i = 0; i < N_DYNAMIC_PARKING_FACILITY; i++) {
 				DynamicParkingFacilityAgent dynamicParkingFacility = new DynamicParkingFacilityAgent();
 				parkingFacilities.add(dynamicParkingFacility);
