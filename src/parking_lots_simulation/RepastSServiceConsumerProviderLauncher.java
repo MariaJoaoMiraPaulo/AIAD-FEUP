@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
+import parking_lots_simulation.behaviours.ExplorerDriverBehaviour;
+import parking_lots_simulation.behaviours.GuidedDriverBehaviour;
+import parking_lots_simulation.behaviours.StaticParkingFacilityBehaviour;
+import parking_lots_simulation.debug.ExplorerDriverAgent;
+import parking_lots_simulation.debug.GuidedDriverAgent;
 import repast.simphony.context.Context;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
@@ -23,7 +28,7 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 	private static int N_GUIDED_DRIVERS = 10;
 	private static int GRID_WIDTH_SIZE = 50;
 	private static int GRID_HEIGHT_SIZE = 50;
-	private static ArrayList<StaticParkingFacilityAgent> staticParkingFacilities = new ArrayList<>();
+	private static ArrayList<ParkingFacilityAgent> parkingFacilities = new ArrayList<>();
 
 	private ContainerController mainContainer;
 	
@@ -44,7 +49,7 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 	}
 	
 	@Override
-	public Context build(Context<Object> context) {
+	public Context<?> build(Context<Object> context) {
 		GridFactory  factory = GridFactoryFinder.createGridFactory(null);
 		GridBuilderParameters<Object> gridBuilderParameters = new GridBuilderParameters<Object>(new StrictBorders(), 
 				new RandomGridAdder<Object>(), true, GRID_WIDTH_SIZE, GRID_HEIGHT_SIZE);
@@ -55,22 +60,24 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 
 	public void launchAgents() {
 		try {
-			
 			for (int i = 0; i < N_STATIC_PARKING_FACILITY; i++) {
-				StaticParkingFacilityAgent spf = new StaticParkingFacilityAgent();
-				staticParkingFacilities.add(spf);
-				mainContainer.acceptNewAgent("StaticParkingFacility" + i, spf).start();
+				ParkingFacilityAgent parkingFacility = new ParkingFacilityAgent();
+				parkingFacilities.add(parkingFacility);
+				parkingFacility.addBehaviour(new StaticParkingFacilityBehaviour());
+				mainContainer.acceptNewAgent("StaticParkingFacility" + i, parkingFacility).start();
 			}
 			// create explorer driver agents
 			for (int i = 0; i < N_EXPLORER_DRIVERS; i++) {
-				ExplorerDriverAgent ed = new ExplorerDriverAgent();
-				mainContainer.acceptNewAgent("ExplorerDriver" + i, ed).start();
+				DriverAgent explorerDriver = new ExplorerDriverAgent();
+				explorerDriver.addBehaviour(new ExplorerDriverBehaviour(explorerDriver, mainGrid, parkingFacilities));
+				mainContainer.acceptNewAgent("ExplorerDriver" + i, explorerDriver).start();
 			}
 
 			// create guided driver agents
 			for (int i = 0; i < N_GUIDED_DRIVERS; i++) {
-				GuidedDriverAgent gd = new GuidedDriverAgent(mainGrid, staticParkingFacilities);
-				mainContainer.acceptNewAgent("GuidedDriver" + i, gd).start();
+				DriverAgent guidedDriver = new GuidedDriverAgent();
+				guidedDriver.addBehaviour(new GuidedDriverBehaviour(guidedDriver, mainGrid, parkingFacilities));
+				mainContainer.acceptNewAgent("GuidedDriver" + i, guidedDriver).start();
 			}
 
 		} catch (StaleProxyException e) {
