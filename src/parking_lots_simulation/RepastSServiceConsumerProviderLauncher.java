@@ -91,8 +91,8 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 			// create guided driver agents
 			for (int i = 0; i < N_GUIDED_DRIVERS; i++) {
 				DriverAgent guidedDriver = new GuidedDriverAgent();
-				guidedDriver.addBehaviour(new GuidedDriverBehaviour(guidedDriver, mainGrid, parkingFacilities));
 				mainContainer.acceptNewAgent("GuidedDriver" + i, guidedDriver).start();
+				guidedDriver.addBehaviour(new GuidedDriverBehaviour(guidedDriver, mainGrid, parkingFacilities));
 			}
 
 		} catch (StaleProxyException e) {
