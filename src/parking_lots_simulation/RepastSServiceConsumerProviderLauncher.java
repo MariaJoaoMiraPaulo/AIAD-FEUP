@@ -1,6 +1,7 @@
 package parking_lots_simulation;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -33,7 +34,7 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 	private static final int N_GUIDED_DRIVERS = 10;
 	private static final int GRID_WIDTH_SIZE = 50;
 	private static final int GRID_HEIGHT_SIZE = 50;
-	private static ArrayList<ParkingFacilityAgent> parkingFacilities = new ArrayList<>();
+	private static Set<ParkingFacilityAgent> parkingFacilities = new HashSet<>();
 
 	private ContainerController mainContainer;
 	

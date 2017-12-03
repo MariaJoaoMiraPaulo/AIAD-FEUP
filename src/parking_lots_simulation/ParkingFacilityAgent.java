@@ -2,6 +2,7 @@ package parking_lots_simulation;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import sajas.core.Agent;
 
 public class ParkingFacilityAgent extends Agent {
