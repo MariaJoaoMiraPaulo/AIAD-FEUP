@@ -26,6 +26,13 @@ public class GuidedDriverBehaviour extends DriverBehaviour {
 
 		Set<GridPoint> validFacilities = new HashSet<>();
 
+		// Adds all parking facilities not present in parkingFacilitiesToAvoid to the Set
+		for(ParkingFacilityAgent parkingFacility : parkingFacilities) {
+			if(!parkingFacilitiesToAvoid.contains(parkingFacility)) {
+				validFacilities.add(mainGrid.getLocation(parkingFacility));
+			}
+		}
+
 		return Collections.max(validFacilities, new DistanceComparator(mainGrid, driverAgent));
 	}
 }
