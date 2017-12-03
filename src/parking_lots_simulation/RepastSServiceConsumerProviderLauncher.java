@@ -26,10 +26,10 @@ import sajas.wrapper.ContainerController;
 
 public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 
-	private static final int N_STATIC_PARKING_FACILITY = 5;
-	private static final int N_DYNAMIC_PARKING_FACILITY = 5;
-	private static int N_EXPLORER_DRIVERS = 10;
-	private static int N_GUIDED_DRIVERS = 10;
+	private static final int N_STATIC_PARKING_FACILITY = 20;
+	private static final int N_DYNAMIC_PARKING_FACILITY = 0;
+	private static int N_EXPLORER_DRIVERS = 20;
+	private static int N_GUIDED_DRIVERS = 0;
 	private static int GRID_WIDTH_SIZE = 50;
 	private static int GRID_HEIGHT_SIZE = 50;
 	private static ArrayList<ParkingFacilityAgent> parkingFacilities = new ArrayList<>();
@@ -67,17 +67,17 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 			
 			// create static parking facilities
 			for (int i = 0; i < N_STATIC_PARKING_FACILITY; i++) {
-				StaticParkingFacilityAgent staticParkingFacility = new StaticParkingFacilityAgent();
+				StaticParkingFacilityAgent staticParkingFacility = new StaticParkingFacilityAgent(1);
 				parkingFacilities.add(staticParkingFacility);
-				staticParkingFacility.addBehaviour(new StaticParkingFacilityBehaviour());
+				staticParkingFacility.addBehaviour(new StaticParkingFacilityBehaviour(staticParkingFacility,mainGrid));
 				mainContainer.acceptNewAgent("StaticParkingFacility" + i, staticParkingFacility).start();
 			}
 			
 			// create dynamic parking facilities
 			for (int i = 0; i < N_DYNAMIC_PARKING_FACILITY; i++) {
-				DynamicParkingFacilityAgent dynamicParkingFacility = new DynamicParkingFacilityAgent();
+				DynamicParkingFacilityAgent dynamicParkingFacility = new DynamicParkingFacilityAgent(1);
 				parkingFacilities.add(dynamicParkingFacility);
-				dynamicParkingFacility.addBehaviour(new DynamicParkingFacilityBehaviour());
+				dynamicParkingFacility.addBehaviour(new DynamicParkingFacilityBehaviour(dynamicParkingFacility,mainGrid));
 				mainContainer.acceptNewAgent("DynamicParkingFacility" + i, dynamicParkingFacility).start();
 			}
 			
