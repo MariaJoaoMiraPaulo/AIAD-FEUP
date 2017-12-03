@@ -83,16 +83,18 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 			
 			// create explorer driver agents
 			for (int i = 0; i < N_EXPLORER_DRIVERS; i++) {
-				DriverAgent explorerDriver = new ExplorerDriverAgent();
+				String id = "ExplorerDriver" + i;
+				DriverAgent explorerDriver = new ExplorerDriverAgent(id);
 				explorerDriver.addBehaviour(new ExplorerDriverBehaviour(explorerDriver, mainGrid, parkingFacilities));
-				mainContainer.acceptNewAgent("ExplorerDriver" + i, explorerDriver).start();
+				mainContainer.acceptNewAgent(id, explorerDriver).start();
 			}
 
 			// create guided driver agents
 			for (int i = 0; i < N_GUIDED_DRIVERS; i++) {
-				DriverAgent guidedDriver = new GuidedDriverAgent();
+				String id = "GuidedDriver" + i;
+				DriverAgent guidedDriver = new GuidedDriverAgent(id);
 				guidedDriver.addBehaviour(new GuidedDriverBehaviour(guidedDriver, mainGrid, parkingFacilities));
-				mainContainer.acceptNewAgent("GuidedDriver" + i, guidedDriver).start();
+				mainContainer.acceptNewAgent(id, guidedDriver).start();
 			}
 
 		} catch (StaleProxyException e) {
