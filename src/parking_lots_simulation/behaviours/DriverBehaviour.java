@@ -52,14 +52,38 @@ public abstract class DriverBehaviour extends Behaviour {
 			} else {
 				parkingFacility.parkCar(driverAgent);
 			}
-		} else {
-			//TODO: MOVE 
+		} else { 
+			GridPoint agentPosition = mainGrid.getLocation(driverAgent);
+			
+			int x = directions(destination.getX(), agentPosition.getX());
+			int y = directions(destination.getY(), agentPosition.getY());
+			
+			mainGrid.moveTo(driverAgent, agentPosition.getX() + x , agentPosition.getY() + y);
 		}
 	}
 
 	@Override
 	public boolean done() {
 		return done;
+	}
+	
+	/**
+	 * @param park
+	 * @param agent
+	 * @return 0 if are on the same line/column, 1 or -1 on a different 
+	 */ 
+	private int directions(int park, int agent) {
+
+		int delta = park - agent;
+		
+		if(delta == 0) {
+			return 0;
+		}
+		else if(delta > 0) {
+			return 1;
+		}
+		
+		return -1;
 	}
 
 }
