@@ -33,7 +33,7 @@ public class StaticParkingFacilityBehaviour extends Behaviour {
 	public void action() {
 		// TODO Auto-generated method stub
 		
-		//Get drivers trying the park
+		//Get parked drivers 
 		Iterable<Object> driversAt = mainGrid.getObjectsAt(mainGrid.getLocation(parkingFacility).getX(),mainGrid.getLocation(parkingFacility).getY());
 		Iterator<Object> it = driversAt.iterator();
 		
