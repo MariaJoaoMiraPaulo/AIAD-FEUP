@@ -45,12 +45,15 @@ public abstract class DriverBehaviour extends Behaviour {
 		
 		if(neighbourhood.isNeighbor(driverAgent, destination, 1, 1)) {
 			ParkingFacilityAgent parkingFacility = new GridCell<>(destination, ParkingFacilityAgent.class).items().iterator().next();
-
+			
 			if(parkingFacility.isFull()) {
 				parkingFacilities.add(parkingFacility);
 				destination = null;
 			} else {
 				parkingFacility.parkCar(driverAgent);
+				// TODO random time
+				driverAgent.addBehaviour(new SleepBehaviour(5));
+				done = true;
 			}
 		} else { 
 			GridPoint agentPosition = mainGrid.getLocation(driverAgent);
