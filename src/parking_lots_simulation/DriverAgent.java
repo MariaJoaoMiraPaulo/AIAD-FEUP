@@ -33,4 +33,11 @@ public class DriverAgent extends Agent {
 	public String getId() {
 		return id;
 	}
+	
+	@Override
+	protected void takeDown() {
+		super.takeDown();
+		
+		System.out.println("Adeus!!");
+	}
 }
