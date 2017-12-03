@@ -41,8 +41,10 @@ public class ExplorerDriverBehaviour extends Behaviour {
 		Iterator<ParkingFacilityAgent> it = parkingFacilities.iterator();
 		
 		while(it.hasNext()) {
-			if(mainGrid.getLocation(it.next()).equals(mainGrid.getLocation(driverAgent))) {
+			ParkingFacilityAgent parking = it.next();
+			if(mainGrid.getLocation(parking).equals(mainGrid.getLocation(driverAgent)) && parking.hasAvailableSpace()) {
 				done = true;
+				parking.setAvailableParkingSpaces(parking.getAvailableParkingSpaces()-1);
 				return;
 			}
 		}
