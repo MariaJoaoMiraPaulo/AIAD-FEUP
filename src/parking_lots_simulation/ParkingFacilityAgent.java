@@ -9,11 +9,14 @@ public class ParkingFacilityAgent extends Agent {
 
 	private Map<String, DriverAgent> parkedCars = new HashMap<>();
 	private int capacity;
+	private double price;
 	
-	public ParkingFacilityAgent(int capacity) {
+	public ParkingFacilityAgent(int capacity, double price) {
 		this.capacity = capacity;
+		this.price = price;
 	}
 	
+
 	/**
 	 * @return the number of available parking spaces.
 	 */
@@ -41,5 +44,12 @@ public class ParkingFacilityAgent extends Agent {
 	 */
 	public boolean isFull() {
 		return parkedCars.size() >= capacity;
+	}
+	
+	/**
+	 * @return the price per hour
+	 */
+	public double getPrice() {
+		return price;
 	}
 }

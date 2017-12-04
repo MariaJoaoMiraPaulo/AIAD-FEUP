@@ -37,4 +37,5 @@ public class ExplorerDriverBehaviour extends DriverBehaviour {
 
 		return Collections.min(validFacilities, new DistanceComparator(mainGrid, driverAgent));
 	}
+
 }

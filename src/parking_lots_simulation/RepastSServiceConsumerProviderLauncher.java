@@ -19,6 +19,7 @@ import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
+import repast.simphony.space.grid.GridPoint;
 import repast.simphony.space.grid.RandomGridAdder;
 import repast.simphony.space.grid.StrictBorders;
 import sajas.core.Runtime;
@@ -28,10 +29,10 @@ import sajas.wrapper.ContainerController;
 public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 
 
-	private static final int N_STATIC_PARKING_FACILITY = 5;
-	private static final int N_DYNAMIC_PARKING_FACILITY = 5;
-	private static final int N_EXPLORER_DRIVERS = 10;
-	private static final int N_GUIDED_DRIVERS = 10;
+	private static final int N_STATIC_PARKING_FACILITY = 1;
+	private static final int N_DYNAMIC_PARKING_FACILITY = 1;
+	private static final int N_EXPLORER_DRIVERS = 0;
+	private static final int N_GUIDED_DRIVERS = 1;
 	private static final int GRID_WIDTH_SIZE = 50;
 	private static final int GRID_HEIGHT_SIZE = 50;
 	private static Set<ParkingFacilityAgent> parkingFacilities = new HashSet<>();
@@ -63,13 +64,17 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 		
 		return super.build(context);
 	}
+	
+	public GridPoint generateRandomGridPoint() {
+		return new GridPoint((0 + (int)(Math.random() * GRID_WIDTH_SIZE)), (0 + (int)(Math.random() * GRID_HEIGHT_SIZE)));
+	}
 
 	public void launchAgents() {
 		try {
 			
 			// create static parking facilities
 			for (int i = 0; i < N_STATIC_PARKING_FACILITY; i++) {
-				StaticParkingFacilityAgent staticParkingFacility = new StaticParkingFacilityAgent(1);
+				StaticParkingFacilityAgent staticParkingFacility = new StaticParkingFacilityAgent(1,5);
 				parkingFacilities.add(staticParkingFacility);
 				staticParkingFacility.addBehaviour(new StaticParkingFacilityBehaviour(staticParkingFacility,mainGrid));
 				mainContainer.acceptNewAgent("StaticParkingFacility" + i, staticParkingFacility).start();
@@ -77,7 +82,7 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 			
 			// create dynamic parking facilities
 			for (int i = 0; i < N_DYNAMIC_PARKING_FACILITY; i++) {
-				DynamicParkingFacilityAgent dynamicParkingFacility = new DynamicParkingFacilityAgent(1);
+				DynamicParkingFacilityAgent dynamicParkingFacility = new DynamicParkingFacilityAgent(1,10);
 				parkingFacilities.add(dynamicParkingFacility);
 				dynamicParkingFacility.addBehaviour(new DynamicParkingFacilityBehaviour(dynamicParkingFacility,mainGrid));
 				mainContainer.acceptNewAgent("DynamicParkingFacility" + i, dynamicParkingFacility).start();
@@ -86,7 +91,7 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 			// create explorer driver agents
 			for (int i = 0; i < N_EXPLORER_DRIVERS; i++) {
 				String id = "ExplorerDriver" + i;
-				DriverAgent explorerDriver = new ExplorerDriverAgent(id);
+				DriverAgent explorerDriver = new ExplorerDriverAgent(id,generateRandomGridPoint(),3);
 				explorerDriver.addBehaviour(new ExplorerDriverBehaviour(explorerDriver, mainGrid, parkingFacilities));
 				mainContainer.acceptNewAgent(id, explorerDriver).start();
 			}
@@ -94,7 +99,7 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 			// create guided driver agents
 			for (int i = 0; i < N_GUIDED_DRIVERS; i++) {
 				String id = "GuidedDriver" + i;
-				DriverAgent guidedDriver = new GuidedDriverAgent(id);
+				DriverAgent guidedDriver = new GuidedDriverAgent(id, generateRandomGridPoint(),3);
 				guidedDriver.addBehaviour(new GuidedDriverBehaviour(guidedDriver, mainGrid, parkingFacilities));
 				mainContainer.acceptNewAgent(id, guidedDriver).start();
 			}

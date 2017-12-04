@@ -6,13 +6,17 @@ import sajas.core.behaviours.Behaviour;
 
 public class DriverAgent extends Agent {
 
-	private GridPoint start;
 	private GridPoint destination;
 	private String id;
+	private int durationOfStay;
+	private double paymentEmphasis;
+	private double walkDistanceEmphasis;
 
-	public DriverAgent(String id, GridPoint start, GridPoint destination) {
+	public DriverAgent(String id, GridPoint destination, int duration_of_stay ) {
 		this.id = id;
-		this.start = start;
+		this.durationOfStay = duration_of_stay;
+		this.paymentEmphasis = 1 + (double)(Math.random() * 1.5); //emphasis of agent i on paying a certain amount of money 
+		this.walkDistanceEmphasis = 1 + (double)(Math.random() * 1.5); //emphasis of agent i on  walking a certain distance
 		this.destination = destination;
 	}
 	
@@ -33,6 +37,23 @@ public class DriverAgent extends Agent {
 	public String getId() {
 		return id;
 	}
+	
+	public GridPoint getDestination() {
+		return destination;
+	}
+	
+	public int getDuration_of_stay() {
+		return durationOfStay;
+	}
+
+	public double getPaymentEmphasis() {
+		return paymentEmphasis;
+	}
+
+	public double getWalkDistanceEmphasis() {
+		return walkDistanceEmphasis;
+	}
+
 	
 	@Override
 	protected void takeDown() {

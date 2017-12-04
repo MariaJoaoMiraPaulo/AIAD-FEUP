@@ -1,9 +1,13 @@
 package parking_lots_simulation.behaviours;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
+import javafx.util.Pair;
 import parking_lots_simulation.DriverAgent;
 import parking_lots_simulation.NoPositiveUtilityParkingFoundException;
 import parking_lots_simulation.ParkingFacilityAgent;
@@ -22,17 +26,35 @@ public class GuidedDriverBehaviour extends DriverBehaviour {
 	public GridPoint getMostUsefulDestination(Set<GridPoint> parkingFacilitiesToAvoid)
 			throws NoPositiveUtilityParkingFoundException {
 		
-		// TODO: Change to GuidedDriverBehaviour
-
-		Set<GridPoint> validFacilities = new HashSet<>();
-
-		// Adds all parking facilities not present in parkingFacilitiesToAvoid to the Set
+		Map<ParkingFacilityAgent, Double> validFacilities = new HashMap<ParkingFacilityAgent, Double>();
+		
 		for(ParkingFacilityAgent parkingFacility : parkingFacilities) {
-			if(!parkingFacilitiesToAvoid.contains(parkingFacility)) {
-				validFacilities.add(mainGrid.getLocation(parkingFacility));
-			}
+			GridPoint parkPosition = mainGrid.getLocation(parkingFacility);
+			double distance_to_destination = mainGrid.getDistanceSq(parkPosition, driverAgent.getDestination());
+			double driverUtility = getUtility(distance_to_destination, parkingFacility.getPrice());
+			
+			System.out.println("Driver Utility" + driverUtility);
+			
+			validFacilities.put(parkingFacility, driverUtility);
 		}
-
-		return Collections.min(validFacilities, new DistanceComparator(mainGrid, driverAgent));
+		
+		return mainGrid.getLocation(getMaxUtilityPark(validFacilities));
+	
 	}
+	
+	public ParkingFacilityAgent getMaxUtilityPark(Map<ParkingFacilityAgent, Double> parkingFacilities) {
+		
+		Entry<ParkingFacilityAgent, Double> maxEntry = null;
+		
+		for(Entry<ParkingFacilityAgent, Double> entry : parkingFacilities.entrySet()) {
+				if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0)
+			    {
+			        maxEntry = entry;
+			    }	
+		}
+		
+		System.out.println("MAX: " + maxEntry.getValue());
+		return maxEntry.getKey();
+	}
+
 }

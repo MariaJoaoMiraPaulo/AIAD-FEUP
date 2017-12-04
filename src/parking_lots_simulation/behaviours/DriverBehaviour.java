@@ -18,7 +18,7 @@ public abstract class DriverBehaviour extends Behaviour {
 	protected Set<ParkingFacilityAgent> parkingFacilities;
 	protected Grid<Object> mainGrid;
 	protected DriverAgent driverAgent;
-	private GridPoint destination;
+	private GridPoint parkingDestination;
 	private VNContains<Object> neighbourhood;
 	private boolean done = false;
 	private Set<GridPoint> parkingFacilitiesToAvoid;
@@ -35,20 +35,20 @@ public abstract class DriverBehaviour extends Behaviour {
 	
 	@Override
 	public void action() {
-		if(destination == null) {
+		if(parkingDestination == null) {
 			try {
-				destination = getMostUsefulDestination(parkingFacilitiesToAvoid);
+				parkingDestination = getMostUsefulDestination(parkingFacilitiesToAvoid);	
 			} catch (NoPositiveUtilityParkingFoundException e) {
 				// TODO: Exit system
 			}
 		}
 		
-		if(neighbourhood.isNeighbor(driverAgent, destination, 1, 1)) {
-			ParkingFacilityAgent parkingFacility = new GridCell<>(destination, ParkingFacilityAgent.class).items().iterator().next();
-			
+		if(neighbourhood.isNeighbor(driverAgent, parkingDestination, 1, 1)) {
+			ParkingFacilityAgent parkingFacility = new GridCell<>(parkingDestination, ParkingFacilityAgent.class).items().iterator().next();
+
 			if(parkingFacility.isFull()) {
 				parkingFacilities.add(parkingFacility);
-				destination = null;
+				parkingDestination = null;
 			} else {
 				parkingFacility.parkCar(driverAgent);
 				// TODO random time
@@ -58,12 +58,13 @@ public abstract class DriverBehaviour extends Behaviour {
 		} else { 
 			GridPoint agentPosition = mainGrid.getLocation(driverAgent);
 			
-			int x = directions(destination.getX(), agentPosition.getX());
-			int y = directions(destination.getY(), agentPosition.getY());
+			int x = directions(parkingDestination.getX(), agentPosition.getX());
+			int y = directions(parkingDestination.getY(), agentPosition.getY());
 			
 			mainGrid.moveTo(driverAgent, agentPosition.getX() + x , agentPosition.getY() + y);
 		}
 	}
+
 
 	@Override
 	public boolean done() {
@@ -87,6 +88,20 @@ public abstract class DriverBehaviour extends Behaviour {
 		}
 		
 		return -1;
+	}
+	
+	public double getUtility(double distance_to_destination, double price) {
+		
+		double utility = 0 + (double)(Math.random() * 1); 
+		double beta = 0 + (double)(Math.random() * 1); 
+		double alpha = 0 + (double)(Math.random() * 1); 
+		double u = 0.9;
+		double v = 0.9;
+		
+		double payment = alpha * price * driverAgent.getDuration_of_stay();
+		double effort = beta * distance_to_destination;
+		
+		return utility - driverAgent.getPaymentEmphasis()*Math.pow(payment, u) - driverAgent.getWalkDistanceEmphasis() * Math.pow(effort, v);
 	}
 
 }

@@ -4,8 +4,8 @@ import parking_lots_simulation.ParkingFacilityAgent;
 
 public class StaticParkingFacilityAgent extends ParkingFacilityAgent {
 
-	public StaticParkingFacilityAgent(int capacity) {
-		super(capacity);
+	public StaticParkingFacilityAgent(int capacity, double price) {
+		super(capacity, price);
 	}
 	
 }
