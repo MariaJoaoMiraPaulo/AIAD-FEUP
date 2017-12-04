@@ -29,12 +29,16 @@ import sajas.wrapper.ContainerController;
 public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 
 
-	private static final int N_STATIC_PARKING_FACILITY = 1;
-	private static final int N_DYNAMIC_PARKING_FACILITY = 1;
-	private static final int N_EXPLORER_DRIVERS = 0;
-	private static final int N_GUIDED_DRIVERS = 1;
-	private static final int GRID_WIDTH_SIZE = 50;
-	private static final int GRID_HEIGHT_SIZE = 50;
+	public static final int N_STATIC_PARKING_FACILITY = 1;
+	public static final int N_DYNAMIC_PARKING_FACILITY = 1;
+	public static final int N_EXPLORER_DRIVERS = 0;
+	public static final int N_GUIDED_DRIVERS = 1;
+	public static final int GRID_WIDTH_SIZE = 50;
+	public static final int GRID_HEIGHT_SIZE = 50;
+	public static final int MAX_PRICE = 5;
+	public static final int MAX_DURATION_OF_STAY = 8;
+	public static final double MAX_PAYMENT = (1 * MAX_PRICE * MAX_DURATION_OF_STAY);
+	public static final double MAX_EFFORT =  (1 * Math.sqrt(Math.pow(GRID_WIDTH_SIZE,2) + Math.pow(GRID_HEIGHT_SIZE,2)));
 	private static Set<ParkingFacilityAgent> parkingFacilities = new HashSet<>();
 
 	private ContainerController mainContainer;
@@ -108,4 +112,5 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 			e.printStackTrace();
 		}
 	}
+
 }

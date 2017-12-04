@@ -6,6 +6,7 @@ import java.util.Set;
 import parking_lots_simulation.DriverAgent;
 import parking_lots_simulation.NoPositiveUtilityParkingFoundException;
 import parking_lots_simulation.ParkingFacilityAgent;
+import parking_lots_simulation.RepastSServiceConsumerProviderLauncher;
 import repast.simphony.query.space.grid.GridCell;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
@@ -92,12 +93,15 @@ public abstract class DriverBehaviour extends Behaviour {
 	
 	public double getUtility(double distance_to_destination, double price) {
 		
-		double utility = 0 + (double)(Math.random() * 1); 
-		double beta = 0 + (double)(Math.random() * 1); 
-		double alpha = 0 + (double)(Math.random() * 1); 
 		double u = 0.9;
 		double v = 0.9;
 		
+		double maxUtility = driverAgent.getPaymentEmphasis()*Math.pow(RepastSServiceConsumerProviderLauncher.MAX_PAYMENT, u) - driverAgent.getWalkDistanceEmphasis() * Math.pow(RepastSServiceConsumerProviderLauncher.MAX_EFFORT, v);
+		
+		double utility = 0 + (double)(Math.random() * maxUtility); 
+		double beta = 0 + (double)(Math.random() * 1); 
+		double alpha = 0 + (double)(Math.random() * 1); 
+	
 		double payment = alpha * price * driverAgent.getDuration_of_stay();
 		double effort = beta * distance_to_destination;
 		
