@@ -1,17 +1,13 @@
 package parking_lots_simulation.behaviours;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javafx.util.Pair;
 import parking_lots_simulation.DriverAgent;
 import parking_lots_simulation.NoPositiveUtilityParkingFoundException;
 import parking_lots_simulation.ParkingFacilityAgent;
-import parking_lots_simulation.comparators.DistanceComparator;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 

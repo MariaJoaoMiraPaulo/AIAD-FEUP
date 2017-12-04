@@ -1,21 +1,14 @@
 package parking_lots_simulation.behaviours;
 
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
-
-import javax.print.attribute.standard.Destination;
 
 import parking_lots_simulation.DriverAgent;
 import parking_lots_simulation.NoPositiveUtilityParkingFoundException;
 import parking_lots_simulation.ParkingFacilityAgent;
 import parking_lots_simulation.RepastSServiceConsumerProviderLauncher;
-import repast.simphony.query.space.grid.GridCell;
-import repast.simphony.query.space.grid.GridCellNgh;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
-import repast.simphony.space.grid.VNContains;
 import sajas.core.behaviours.Behaviour;
 
 public abstract class DriverBehaviour extends Behaviour {
