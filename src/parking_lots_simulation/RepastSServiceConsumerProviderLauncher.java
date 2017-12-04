@@ -29,10 +29,10 @@ import sajas.wrapper.ContainerController;
 public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 
 
-	public static final int N_STATIC_PARKING_FACILITY = 1;
-	public static final int N_DYNAMIC_PARKING_FACILITY = 1;
-	public static final int N_EXPLORER_DRIVERS = 0;
-	public static final int N_GUIDED_DRIVERS = 1;
+	public static final int N_STATIC_PARKING_FACILITY = 5;
+	public static final int N_DYNAMIC_PARKING_FACILITY = 5;
+	public static final int N_EXPLORER_DRIVERS = 10;
+	public static final int N_GUIDED_DRIVERS = 10;
 	public static final int GRID_WIDTH_SIZE = 50;
 	public static final int GRID_HEIGHT_SIZE = 50;
 	public static final int MAX_PRICE = 5; //per hour

@@ -53,7 +53,6 @@ public class DriverAgent extends Agent {
 	public double getWalkDistanceEmphasis() {
 		return walkDistanceEmphasis;
 	}
-
 	
 	@Override
 	protected void takeDown() {

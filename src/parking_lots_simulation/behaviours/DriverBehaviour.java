@@ -1,6 +1,7 @@
 package parking_lots_simulation.behaviours;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import parking_lots_simulation.DriverAgent;
@@ -8,6 +9,7 @@ import parking_lots_simulation.NoPositiveUtilityParkingFoundException;
 import parking_lots_simulation.ParkingFacilityAgent;
 import parking_lots_simulation.RepastSServiceConsumerProviderLauncher;
 import repast.simphony.query.space.grid.GridCell;
+import repast.simphony.query.space.grid.GridCellNgh;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 import repast.simphony.space.grid.VNContains;
@@ -44,21 +46,22 @@ public abstract class DriverBehaviour extends Behaviour {
 			}
 		}
 		
-		if(neighbourhood.isNeighbor(driverAgent, parkingDestination, 1, 1)) {
-			ParkingFacilityAgent parkingFacility = new GridCell<>(parkingDestination, ParkingFacilityAgent.class).items().iterator().next();
 
+		ParkingFacilityAgent parkingFacility = (ParkingFacilityAgent)mainGrid.getObjectAt(parkingDestination.getX(), parkingDestination.getY());
+		GridPoint agentPosition = mainGrid.getLocation(driverAgent);
+		if(neighbourhood.isNeighbor(driverAgent, parkingFacility, 1, 1) || verifyDiagonals(agentPosition)) {
 			if(parkingFacility.isFull()) {
-				parkingFacilities.add(parkingFacility);
-				parkingDestination = null;
+				//parkingFacilities.add(parkingFacility);
+				//destination = null;
 			} else {
+				mainGrid.moveTo(driverAgent, parkingDestination.getX(), parkingDestination.getY());
 				parkingFacility.parkCar(driverAgent);
 				// TODO random time
-				driverAgent.addBehaviour(new SleepBehaviour(5));
+
+				driverAgent.addBehaviour(new SleepBehaviour(driverAgent, parkingFacility, 5));
 				done = true;
 			}
 		} else { 
-			GridPoint agentPosition = mainGrid.getLocation(driverAgent);
-			
 			int x = directions(parkingDestination.getX(), agentPosition.getX());
 			int y = directions(parkingDestination.getY(), agentPosition.getY());
 			
@@ -91,6 +94,7 @@ public abstract class DriverBehaviour extends Behaviour {
 		return -1;
 	}
 	
+
 	public double getUtility(double distance_to_destination, double price) {
 		
 		double u = 0.9;
@@ -106,6 +110,19 @@ public abstract class DriverBehaviour extends Behaviour {
 		double effort = beta * distance_to_destination;
 		
 		return utility - driverAgent.getPaymentEmphasis()*Math.pow(payment, u) - driverAgent.getWalkDistanceEmphasis() * Math.pow(effort, v);
+	}
+
+	private boolean verifyDiagonals(GridPoint agentPosition) {
+		
+		if((agentPosition.getX() + 1) == parkingDestination.getX() && (agentPosition.getY() + 1) == parkingDestination.getY()
+				|| (agentPosition.getX() + 1) == parkingDestination.getX() && (agentPosition.getY() - 1) == parkingDestination.getY()
+				|| (agentPosition.getX() - 1) == parkingDestination.getX() && (agentPosition.getY() + 1) == parkingDestination.getY()
+				|| (agentPosition.getX() - 1) == parkingDestination.getX() && (agentPosition.getY() - 1) == parkingDestination.getY()
+				|| agentPosition.getX() == parkingDestination.getX() && agentPosition.getY() == parkingDestination.getY()) {
+			return true;
+		}
+		
+		return false;
 	}
 
 }
