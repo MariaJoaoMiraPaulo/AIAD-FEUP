@@ -14,11 +14,34 @@ import sajas.core.behaviours.Behaviour;
 public abstract class DriverBehaviour extends Behaviour {
 
 	private static final long serialVersionUID = 4252257290496119984L;
+	/**
+	 * All parking facilities open
+	 */
 	protected Set<ParkingFacilityAgent> parkingFacilities;
+	
+	/**
+	 * Grid that represents the simulation space
+	 */
 	protected Grid<Object> mainGrid;
+	
+	/**
+	 * Driver agent where this behaviour is acting
+	 */
 	protected DriverAgent driverAgent;
+	
+	/**
+	 * Location of the favorite park
+	 */
 	private GridPoint parkingDestination;
+	
+	/**
+	 * Flag that represents when this behaviour has ended
+	 */
 	private boolean done = false;
+	
+	/**
+	 * Parking facilities discarded
+	 */
 	private Set<GridPoint> parkingFacilitiesToAvoid;
 
 	public DriverBehaviour(DriverAgent driver, Grid<Object> mainGrid, Set<ParkingFacilityAgent> parkingFacilities) {
