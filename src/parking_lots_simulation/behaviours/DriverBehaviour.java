@@ -2,7 +2,10 @@ package parking_lots_simulation.behaviours;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+
+import javax.print.attribute.standard.Destination;
 
 import parking_lots_simulation.DriverAgent;
 import parking_lots_simulation.NoPositiveUtilityParkingFoundException;
@@ -22,7 +25,6 @@ public abstract class DriverBehaviour extends Behaviour {
 	protected Grid<Object> mainGrid;
 	protected DriverAgent driverAgent;
 	private GridPoint parkingDestination;
-	private VNContains<Object> neighbourhood;
 	private boolean done = false;
 	private Set<GridPoint> parkingFacilitiesToAvoid;
 
@@ -30,7 +32,6 @@ public abstract class DriverBehaviour extends Behaviour {
 		this.driverAgent = driver;
 		this.mainGrid = mainGrid;
 		this.parkingFacilities = parkingFacilities;
-		this.neighbourhood = new VNContains<>(mainGrid);
 		this.parkingFacilitiesToAvoid = new HashSet<>();
 	}
 
@@ -45,11 +46,12 @@ public abstract class DriverBehaviour extends Behaviour {
 				// TODO: Exit system
 			}
 		}
-		
 
-		ParkingFacilityAgent parkingFacility = (ParkingFacilityAgent)mainGrid.getObjectAt(parkingDestination.getX(), parkingDestination.getY());
 		GridPoint agentPosition = mainGrid.getLocation(driverAgent);
-		if(neighbourhood.isNeighbor(driverAgent, parkingFacility, 1, 1) || verifyDiagonals(agentPosition)) {
+		
+		if(isAgentOnParkEntrance(mainGrid.getDistance(agentPosition, parkingDestination))) {
+			ParkingFacilityAgent parkingFacility = (ParkingFacilityAgent)mainGrid.getObjectAt(parkingDestination.getX(), parkingDestination.getY());
+			
 			if(parkingFacility.isFull()) {
 				//parkingFacilities.add(parkingFacility);
 				//destination = null;
@@ -68,7 +70,6 @@ public abstract class DriverBehaviour extends Behaviour {
 			mainGrid.moveTo(driverAgent, agentPosition.getX() + x , agentPosition.getY() + y);
 		}
 	}
-
 
 	@Override
 	public boolean done() {
@@ -112,17 +113,17 @@ public abstract class DriverBehaviour extends Behaviour {
 		return utility - driverAgent.getPaymentEmphasis()*Math.pow(payment, u) - driverAgent.getWalkDistanceEmphasis() * Math.pow(effort, v);
 	}
 
-	private boolean verifyDiagonals(GridPoint agentPosition) {
+	/**
+	 * If the driver agent is at sqrt(2) distance of a park facility
+	 * @param distance distance between park and driver agent
+	 * @return true if is at sqrt(2) or less, false otherwise
+	 */
+	private boolean isAgentOnParkEntrance(double distance) {
 		
-		if((agentPosition.getX() + 1) == parkingDestination.getX() && (agentPosition.getY() + 1) == parkingDestination.getY()
-				|| (agentPosition.getX() + 1) == parkingDestination.getX() && (agentPosition.getY() - 1) == parkingDestination.getY()
-				|| (agentPosition.getX() - 1) == parkingDestination.getX() && (agentPosition.getY() + 1) == parkingDestination.getY()
-				|| (agentPosition.getX() - 1) == parkingDestination.getX() && (agentPosition.getY() - 1) == parkingDestination.getY()
-				|| agentPosition.getX() == parkingDestination.getX() && agentPosition.getY() == parkingDestination.getY()) {
+		if(distance <= Math.sqrt(2)) {
 			return true;
 		}
 		
 		return false;
 	}
-
 }
