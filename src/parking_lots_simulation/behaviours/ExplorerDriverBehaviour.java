@@ -1,61 +1,40 @@
 package parking_lots_simulation.behaviours;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import parking_lots_simulation.DriverAgent;
+import parking_lots_simulation.NoPositiveUtilityParkingFoundException;
 import parking_lots_simulation.ParkingFacilityAgent;
+import parking_lots_simulation.comparators.DistanceComparator;
 import repast.simphony.space.grid.Grid;
-import sajas.core.behaviours.Behaviour;
+import repast.simphony.space.grid.GridPoint;
 
-public class ExplorerDriverBehaviour extends Behaviour {
+public class ExplorerDriverBehaviour extends DriverBehaviour {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Grid<Object> mainGrid;
-	private DriverAgent driverAgent;
-	private ArrayList<ParkingFacilityAgent> parkingFacilities;
-	private boolean done = false;
 
-	public ExplorerDriverBehaviour(DriverAgent driverAgent, Grid<Object> mainGrid, ArrayList<ParkingFacilityAgent> staticParkingFacilities) {
-		super();
-		this.driverAgent = driverAgent;
-		this.mainGrid = mainGrid;
-		this.parkingFacilities = staticParkingFacilities;
+	public ExplorerDriverBehaviour(DriverAgent driverAgent, Grid<Object> mainGrid, Set<ParkingFacilityAgent> parkingFacilities) {
+		super(driverAgent, mainGrid, parkingFacilities);
 	}
 
-	/**
-	 * Generates a random coordinate with a distance of 1 from coord
-	 * @param coord
-	 * @param max
-	 * @return
-	 */
-	private int generateRandomCoordinate(int coord, int max) {
-		return Math.min(Math.max(coord + (int) (Math.random()*3)-1, 0), max-1);
-	}
-	
 	@Override
-	public void action() {
-		Iterator<ParkingFacilityAgent> it = parkingFacilities.iterator();
+	public GridPoint getMostUsefulDestination(Set<GridPoint> parkingFacilitiesToAvoid)
+			throws NoPositiveUtilityParkingFoundException {
 		
-		while(it.hasNext()) {
-			ParkingFacilityAgent parking = it.next();
-			if(mainGrid.getLocation(parking).equals(mainGrid.getLocation(driverAgent)) && parking.hasAvailableSpace()) {
-				done = true;
-				parking.setAvailableParkingSpaces(parking.getAvailableParkingSpaces()-1);
-				return;
+		Set<GridPoint> validFacilities = new HashSet<>();
+
+		// Adds all parking facilities not present in parkingFacilitiesToAvoid to the Set
+		for(ParkingFacilityAgent parkingFacility : parkingFacilities) {
+			if(!parkingFacilitiesToAvoid.contains(parkingFacility)) {
+				validFacilities.add(mainGrid.getLocation(parkingFacility));
 			}
 		}
-		
-		int x = generateRandomCoordinate(mainGrid.getLocation(driverAgent).getX(), mainGrid.getDimensions().getWidth());
-		int y = generateRandomCoordinate(mainGrid.getLocation(driverAgent).getY(), mainGrid.getDimensions().getHeight());
-		mainGrid.moveTo(driverAgent, x, y);
-	}
 
-	@Override
-	public boolean done() {
-		return done;
+		return Collections.min(validFacilities, new DistanceComparator(mainGrid, driverAgent));
 	}
 }

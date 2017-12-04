@@ -1,26 +1,45 @@
 package parking_lots_simulation;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import sajas.core.Agent;
 
 public class ParkingFacilityAgent extends Agent {
 
-	private int availableParkingSpaces;
+	private Map<String, DriverAgent> parkedCars = new HashMap<>();
 	private int capacity;
 	
 	public ParkingFacilityAgent(int capacity) {
 		this.capacity = capacity;
-		this.availableParkingSpaces = capacity;
 	}
 	
+	/**
+	 * @return the number of available parking spaces.
+	 */
 	public int getAvailableParkingSpaces() {
-		return availableParkingSpaces;
+		return capacity - parkedCars.size();
 	}
 	
-	public void setAvailableParkingSpaces(int availableParkingSpaces) {	
-		this.availableParkingSpaces = availableParkingSpaces;
+	/**
+	 * Parks car in parking facility. Does not check if the park is full. See {@link #isFull()}
+	 * @param driverAgent Driver to park
+	 */
+	public void parkCar(DriverAgent driverAgent) {
+		parkedCars.put(driverAgent.getId(), driverAgent);
 	}
-
-	public boolean hasAvailableSpace() {
-		return this.availableParkingSpaces > 0;
+	
+	/**
+	 * Removes a car from the parking facility. 
+	 */
+	public void removeCar(DriverAgent driverAgent) {
+		parkedCars.remove(driverAgent.getId());
+	}
+	
+	/**
+	 * @return whether the parking facility is full or not.
+	 */
+	public boolean isFull() {
+		return parkedCars.size() >= capacity;
 	}
 }

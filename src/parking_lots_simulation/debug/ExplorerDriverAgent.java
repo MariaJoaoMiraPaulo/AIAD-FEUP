@@ -7,4 +7,8 @@ import parking_lots_simulation.DriverAgent;
  */
 public class ExplorerDriverAgent extends DriverAgent {
 
+	public ExplorerDriverAgent(String id) {
+		super(id);
+	}
+
 }
