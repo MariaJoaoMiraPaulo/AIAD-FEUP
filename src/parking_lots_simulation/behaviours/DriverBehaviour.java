@@ -1,6 +1,7 @@
 package parking_lots_simulation.behaviours;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import parking_lots_simulation.DriverAgent;
@@ -43,21 +44,20 @@ public abstract class DriverBehaviour extends Behaviour {
 			}
 		}
 		
-		if(neighbourhood.isNeighbor(driverAgent, destination, 1, 1)) {
-			ParkingFacilityAgent parkingFacility = new GridCell<>(destination, ParkingFacilityAgent.class).items().iterator().next();
-			
+		ParkingFacilityAgent parkingFacility = (ParkingFacilityAgent)mainGrid.getObjectAt(destination.getX(), destination.getY());
+		GridPoint agentPosition = mainGrid.getLocation(driverAgent);
+		if(neighbourhood.isNeighbor(driverAgent, parkingFacility, 1, 1) || verifyDiagonals(agentPosition)) {
 			if(parkingFacility.isFull()) {
-				parkingFacilities.add(parkingFacility);
-				destination = null;
+				//parkingFacilities.add(parkingFacility);
+				//destination = null;
 			} else {
+				mainGrid.moveTo(driverAgent, destination.getX(), destination.getY());
 				parkingFacility.parkCar(driverAgent);
 				// TODO random time
-				driverAgent.addBehaviour(new SleepBehaviour(5));
+				driverAgent.addBehaviour(new SleepBehaviour(driverAgent, parkingFacility, 5));
 				done = true;
 			}
 		} else { 
-			GridPoint agentPosition = mainGrid.getLocation(driverAgent);
-			
 			int x = directions(destination.getX(), agentPosition.getX());
 			int y = directions(destination.getY(), agentPosition.getY());
 			
@@ -87,6 +87,19 @@ public abstract class DriverBehaviour extends Behaviour {
 		}
 		
 		return -1;
+	}
+	
+	private boolean verifyDiagonals(GridPoint agentPosition) {
+		
+		if((agentPosition.getX() + 1) == destination.getX() && (agentPosition.getY() + 1) == destination.getY()
+				|| (agentPosition.getX() + 1) == destination.getX() && (agentPosition.getY() - 1) == destination.getY()
+				|| (agentPosition.getX() - 1) == destination.getX() && (agentPosition.getY() + 1) == destination.getY()
+				|| (agentPosition.getX() - 1) == destination.getX() && (agentPosition.getY() - 1) == destination.getY()
+				|| agentPosition.getX() == destination.getX() && agentPosition.getY() == destination.getY()) {
+			return true;
+		}
+		
+		return false;
 	}
 
 }
