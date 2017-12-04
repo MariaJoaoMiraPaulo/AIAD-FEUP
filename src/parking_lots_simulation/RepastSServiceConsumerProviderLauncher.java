@@ -35,9 +35,9 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher{
 	public static final int N_GUIDED_DRIVERS = 1;
 	public static final int GRID_WIDTH_SIZE = 50;
 	public static final int GRID_HEIGHT_SIZE = 50;
-	public static final int MAX_PRICE = 5;
-	public static final int MAX_DURATION_OF_STAY = 8;
-	public static final double MAX_PAYMENT = (1 * MAX_PRICE * MAX_DURATION_OF_STAY);
+	public static final int MAX_PRICE = 5; //per hour
+	public static final int MAX_DURATION_OF_STAY = 8; //TO_DO: ticks?
+ 	public static final double MAX_PAYMENT = (1 * MAX_PRICE * MAX_DURATION_OF_STAY);
 	public static final double MAX_EFFORT =  (1 * Math.sqrt(Math.pow(GRID_WIDTH_SIZE,2) + Math.pow(GRID_HEIGHT_SIZE,2)));
 	private static Set<ParkingFacilityAgent> parkingFacilities = new HashSet<>();
 
