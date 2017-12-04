@@ -29,8 +29,6 @@ public class GuidedDriverBehaviour extends DriverBehaviour {
 			double distance_to_destination = mainGrid.getDistanceSq(parkPosition, driverAgent.getDestination());
 			double driverUtility = getUtility(distance_to_destination, parkingFacility.getPrice());
 			
-			System.out.println("Driver Utility" + driverUtility);
-			
 			validFacilities.put(parkingFacility, driverUtility);
 		}
 		
@@ -49,7 +47,6 @@ public class GuidedDriverBehaviour extends DriverBehaviour {
 			    }	
 		}
 		
-		System.out.println("MAX: " + maxEntry.getValue());
 		return maxEntry.getKey();
 	}
 

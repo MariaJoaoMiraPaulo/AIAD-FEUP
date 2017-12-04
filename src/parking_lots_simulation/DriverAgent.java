@@ -57,7 +57,5 @@ public class DriverAgent extends Agent {
 	@Override
 	protected void takeDown() {
 		super.takeDown();
-		
-		System.out.println("Adeus!!");
 	}
 }

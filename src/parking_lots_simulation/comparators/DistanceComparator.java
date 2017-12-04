@@ -3,7 +3,6 @@ package parking_lots_simulation.comparators;
 import java.util.Comparator;
 
 import parking_lots_simulation.DriverAgent;
-import parking_lots_simulation.ParkingFacilityAgent;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 
