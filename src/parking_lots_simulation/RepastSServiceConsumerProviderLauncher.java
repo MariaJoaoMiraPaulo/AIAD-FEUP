@@ -17,6 +17,8 @@ import parking_lots_simulation.debug.StaticParkingFacilityAgent;
 import repast.simphony.context.Context;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
+import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.parameter.Parameters;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
 import repast.simphony.space.grid.GridPoint;
@@ -28,10 +30,10 @@ import sajas.wrapper.ContainerController;
 
 public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher {
 
-	public static final int N_STATIC_PARKING_FACILITY = 5;
-	public static final int N_DYNAMIC_PARKING_FACILITY = 5;
-	public static final int N_EXPLORER_DRIVERS = 10;
-	public static final int N_GUIDED_DRIVERS = 10;
+	public int staticParkingFacilityCount = 5;
+	public int dynamicParkingFacilityCount = 5;
+	public int explorerDriverCount = 10;
+	public int guidedDriverCount = 10;
 	public static final int GRID_WIDTH_SIZE = 50;
 	public static final int GRID_HEIGHT_SIZE = 50;
 	public static final int MAX_PRICE = 5; // per hour
@@ -56,7 +58,16 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher {
 		Profile p1 = new ProfileImpl();
 		mainContainer = rt.createMainContainer(p1);
 
+		parseParams();
 		launchAgents();
+	}
+
+	private void parseParams() {
+		Parameters params = RunEnvironment.getInstance().getParameters();
+		explorerDriverCount = params.getInteger("explorerDriverCount");
+		guidedDriverCount = params.getInteger("guidedDriverCount");
+		staticParkingFacilityCount = params.getInteger("staticParkingFacilityCount");
+		dynamicParkingFacilityCount = params.getInteger("dynamicParkingFacilityCount");
 	}
 
 	@Override
@@ -65,7 +76,7 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher {
 		GridBuilderParameters<Object> gridBuilderParameters = new GridBuilderParameters<Object>(new StrictBorders(),
 				new SimpleGridAdder<Object>(), true, GRID_WIDTH_SIZE, GRID_HEIGHT_SIZE);
 		mainGrid = factory.createGrid("Main Grid", context, gridBuilderParameters);
-
+		
 		return super.build(context);
 	}
 
@@ -74,10 +85,11 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher {
 	}
 
 	public void launchAgents() {
+
 		try {
 
 			// create static parking facilities
-			for (int i = 0; i < N_STATIC_PARKING_FACILITY; i++) {
+			for (int i = 0; i < staticParkingFacilityCount; i++) {
 				StaticParkingFacilityAgent staticParkingFacility = new StaticParkingFacilityAgent(1, 5);
 				parkingFacilities.add(staticParkingFacility);
 				staticParkingFacility.addBehaviour(new StaticParkingFacilityBehaviour(staticParkingFacility, mainGrid));
@@ -88,7 +100,7 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher {
 			}
 
 			// create dynamic parking facilities
-			for (int i = 0; i < N_DYNAMIC_PARKING_FACILITY; i++) {
+			for (int i = 0; i < dynamicParkingFacilityCount; i++) {
 				DynamicParkingFacilityAgent dynamicParkingFacility = new DynamicParkingFacilityAgent(1, 10);
 				parkingFacilities.add(dynamicParkingFacility);
 				dynamicParkingFacility
@@ -100,7 +112,7 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher {
 			}
 
 			// create explorer driver agents
-			for (int i = 0; i < N_EXPLORER_DRIVERS; i++) {
+			for (int i = 0; i < explorerDriverCount; i++) {
 				String id = "ExplorerDriver" + i;
 
 				GridPoint destination = generateRandomGridPoint();
@@ -115,7 +127,7 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher {
 			}
 
 			// create guided driver agents
-			for (int i = 0; i < N_GUIDED_DRIVERS; i++) {
+			for (int i = 0; i < guidedDriverCount; i++) {
 				String id = "GuidedDriver" + i;
 
 				GridPoint destination = generateRandomGridPoint();
