@@ -38,9 +38,9 @@ public class DriverAgent extends Agent {
 		this.durationOfStay = durationOfStay;
 		this.destination = destination;
 
-		paymentEmphasis = 1 + Math.random() * (1.5 - 1);
-		walkDistanceEmphasis = 1 + Math.random() * (1.5 - 1);
-		utilityForArrivingAtDestination = Math.random() * 10000;
+		paymentEmphasis = 1 + Launcher.driverRandomGenerator.nextDouble() * (1.5 - 1);
+		walkDistanceEmphasis = 1 + Launcher.driverRandomGenerator.nextDouble() * (1.5 - 1);
+		utilityForArrivingAtDestination = Launcher.driverRandomGenerator.nextDouble() * 10000;
 	}
 
 	public DriverAgent(String id) {

@@ -1,6 +1,7 @@
 package parking_lots_simulation;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -38,7 +39,7 @@ public class Launcher extends RepastSLauncher {
 	public int dynamicParkingFacilityCount = 5;
 	public int explorerDriverCount = 10;
 	public int guidedDriverCount = 10;
-	public int driverPeriod = 100;
+	private int driverGenerationSeed;
 	public static final int TICKS_IN_HOUR = 600000;
 	public static final int GRID_WIDTH_SIZE = 50;
 	public static final int GRID_HEIGHT_SIZE = 50;
@@ -52,6 +53,7 @@ public class Launcher extends RepastSLauncher {
 	private ContainerController mainContainer;
 
 	private Grid<Object> mainGrid;
+	public static Random driverRandomGenerator;
 
 	@Override
 	public String getName() {
@@ -60,11 +62,13 @@ public class Launcher extends RepastSLauncher {
 
 	@Override
 	protected void launchJADE() {
+		parseParams();
+		driverRandomGenerator = new Random(driverGenerationSeed);
+
 		Runtime rt = Runtime.instance();
 		Profile p1 = new ProfileImpl();
 		mainContainer = rt.createMainContainer(p1);
 
-		parseParams();
 		launchAgents();
 	}
 
@@ -74,7 +78,7 @@ public class Launcher extends RepastSLauncher {
 		guidedDriverCount = params.getInteger("guidedDriverCount");
 		staticParkingFacilityCount = params.getInteger("staticParkingFacilityCount");
 		dynamicParkingFacilityCount = params.getInteger("dynamicParkingFacilityCount");
-		driverPeriod = params.getInteger("driverPeriod");
+		driverGenerationSeed = params.getInteger("driverGenerationSeed");
 	}
 
 	@Override
@@ -88,7 +92,7 @@ public class Launcher extends RepastSLauncher {
 	}
 
 	private GridPoint generateRandomGridPoint() {
-		return new GridPoint(((int) (Math.random() * GRID_WIDTH_SIZE)), ((int) (Math.random() * GRID_HEIGHT_SIZE)));
+		return new GridPoint(driverRandomGenerator.nextInt(GRID_WIDTH_SIZE), driverRandomGenerator.nextInt(GRID_HEIGHT_SIZE));
 	}
 
 	public void launchAgents() {
@@ -123,13 +127,13 @@ public class Launcher extends RepastSLauncher {
 				String id = "ExplorerDriver" + i;
 
 				// Randomized from 7.5 to 8.5 hours. TODO: Change this according to day of week
-				double durationOfStay = 7.5 + Math.random();
+				double durationOfStay = 7.5 + driverRandomGenerator.nextInt(2);
 
 				GridPoint destination = generateRandomGridPoint();
 				DriverAgent explorerDriver = new ExplorerDriverAgent(id, destination, durationOfStay);
 				SequentialBehaviour driverBehaviour = new SequentialBehaviour();
 				driverBehaviour.addSubBehaviour(
-						new ExplorerDriverBehaviour(explorerDriver, driverPeriod, mainGrid, parkingFacilities));
+						new ExplorerDriverBehaviour(explorerDriver, mainGrid, parkingFacilities));
 
 				driverBehaviour
 						.addSubBehaviour(new SleepBehaviour(explorerDriver, (int) durationOfStay * TICKS_IN_HOUR));
@@ -146,14 +150,14 @@ public class Launcher extends RepastSLauncher {
 				String id = "GuidedDriver" + i;
 
 				// Randomized from 7.5 to 8.5 hours. TODO: Change this according to day of week
-				double durationOfStay = 7.5 + Math.random();
+				double durationOfStay = 7.5 + driverRandomGenerator.nextInt();
 
 				GridPoint destination = generateRandomGridPoint();
 				DriverAgent guidedDriver = new GuidedDriverAgent(id, destination, durationOfStay);
 
 				SequentialBehaviour driverBehaviour = new SequentialBehaviour();
 				driverBehaviour.addSubBehaviour(
-						new GuidedDriverBehaviour(guidedDriver, driverPeriod, mainGrid, parkingFacilities));
+						new GuidedDriverBehaviour(guidedDriver, mainGrid, parkingFacilities));
 				driverBehaviour.addSubBehaviour(new SleepBehaviour(guidedDriver, (int) durationOfStay * TICKS_IN_HOUR));
 				guidedDriver.addBehaviour(driverBehaviour);
 

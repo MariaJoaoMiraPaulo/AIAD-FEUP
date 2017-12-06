@@ -19,14 +19,14 @@ public class ExplorerDriverBehaviour extends ParkSearchingBehaviour {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public ExplorerDriverBehaviour(DriverAgent driverAgent, int period, Grid<Object> mainGrid,
+	public ExplorerDriverBehaviour(DriverAgent driverAgent, Grid<Object> mainGrid,
 			Set<ParkingFacilityAgent> parkingFacilities) {
-		super(driverAgent, period, mainGrid, parkingFacilities);
+		super(driverAgent, mainGrid, parkingFacilities);
 	}
 
 	@Override
-	public Entry<ParkingFacilityAgent, Double> getMostUsefulDestination(
-			Set<ParkingFacilityAgent> fullParkingFacilities) throws NoValidDestinationException {
+	public Entry<ParkingFacilityAgent, Double> getMostUsefulDestination(Set<ParkingFacilityAgent> fullParkingFacilities)
+			throws NoValidDestinationException {
 
 		Set<ParkingFacilityAgent> validFacilities = new HashSet<>();
 

@@ -27,8 +27,7 @@ public abstract class ParkSearchingBehaviour extends Behaviour {
 	protected Set<ParkingFacilityAgent> parkingFacilities;
 	private boolean done = false;
 
-	public ParkSearchingBehaviour(DriverAgent driver, int period, Grid<Object> grid,
-			Set<ParkingFacilityAgent> parkingFacilities) {
+	public ParkSearchingBehaviour(DriverAgent driver, Grid<Object> grid, Set<ParkingFacilityAgent> parkingFacilities) {
 		super();
 		this.driver = driver;
 		this.grid = grid;

@@ -13,9 +13,9 @@ import repast.simphony.space.grid.Grid;
 public class GuidedDriverBehaviour extends ParkSearchingBehaviour {
 	private static final long serialVersionUID = -766675944062469676L;
 
-	public GuidedDriverBehaviour(DriverAgent guidedDriver, int period, Grid<Object> mainGrid,
+	public GuidedDriverBehaviour(DriverAgent guidedDriver, Grid<Object> mainGrid,
 			Set<ParkingFacilityAgent> parkingFacilities) {
-		super(guidedDriver, period, mainGrid, parkingFacilities);
+		super(guidedDriver, mainGrid, parkingFacilities);
 	}
 
 	@Override
