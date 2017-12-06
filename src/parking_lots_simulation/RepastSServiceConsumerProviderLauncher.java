@@ -34,6 +34,7 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher {
 	public int dynamicParkingFacilityCount = 5;
 	public int explorerDriverCount = 10;
 	public int guidedDriverCount = 10;
+	public int driverPeriod = 100;
 	public static final int GRID_WIDTH_SIZE = 50;
 	public static final int GRID_HEIGHT_SIZE = 50;
 	public static final int MAX_PRICE = 5; // per hour
@@ -68,6 +69,7 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher {
 		guidedDriverCount = params.getInteger("guidedDriverCount");
 		staticParkingFacilityCount = params.getInteger("staticParkingFacilityCount");
 		dynamicParkingFacilityCount = params.getInteger("dynamicParkingFacilityCount");
+		driverPeriod = params.getInteger("driverPeriod");
 	}
 
 	@Override
@@ -118,7 +120,7 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher {
 				GridPoint destination = generateRandomGridPoint();
 				DriverAgent explorerDriver = new ExplorerDriverAgent(id, destination, 3);
 
-				explorerDriver.addBehaviour(new ExplorerDriverBehaviour(explorerDriver, mainGrid, parkingFacilities));
+				explorerDriver.addBehaviour(new ExplorerDriverBehaviour(explorerDriver, driverPeriod, mainGrid, parkingFacilities));
 
 				mainContainer.acceptNewAgent(id, explorerDriver).start();
 
@@ -133,14 +135,13 @@ public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher {
 				GridPoint destination = generateRandomGridPoint();
 				DriverAgent guidedDriver = new GuidedDriverAgent(id, destination, 3);
 
-				guidedDriver.addBehaviour(new GuidedDriverBehaviour(guidedDriver, mainGrid, parkingFacilities));
+				guidedDriver.addBehaviour(new GuidedDriverBehaviour(guidedDriver, driverPeriod, mainGrid, parkingFacilities));
 
 				mainContainer.acceptNewAgent(id, guidedDriver).start();
 
 				GridPoint start = generateRandomGridPoint();
 				mainGrid.moveTo(guidedDriver, start.getX(), start.getY());
 			}
-
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
 		}

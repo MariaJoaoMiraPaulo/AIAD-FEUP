@@ -18,8 +18,8 @@ public class ExplorerDriverBehaviour extends DriverBehaviour {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public ExplorerDriverBehaviour(DriverAgent driverAgent, Grid<Object> mainGrid, Set<ParkingFacilityAgent> parkingFacilities) {
-		super(driverAgent, mainGrid, parkingFacilities);
+	public ExplorerDriverBehaviour(DriverAgent driverAgent, int period, Grid<Object> mainGrid, Set<ParkingFacilityAgent> parkingFacilities) {
+		super(driverAgent, period, mainGrid, parkingFacilities);
 	}
 
 	@Override
@@ -30,11 +30,12 @@ public class ExplorerDriverBehaviour extends DriverBehaviour {
 
 		// Adds all parking facilities not present in parkingFacilitiesToAvoid to the Set
 		for(ParkingFacilityAgent parkingFacility : parkingFacilities) {
-			if(!parkingFacilitiesToAvoid.contains(parkingFacility)) {
-				validFacilities.add(mainGrid.getLocation(parkingFacility));
+			GridPoint facilityLocation = mainGrid.getLocation(parkingFacility);
+			if(!parkingFacilitiesToAvoid.contains(facilityLocation)) {
+				validFacilities.add(facilityLocation);
 			}
 		}
-
+		
 		return Collections.min(validFacilities, new DistanceComparator(mainGrid, driverAgent));
 	}
 

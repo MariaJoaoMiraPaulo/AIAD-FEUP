@@ -10,8 +10,9 @@ import parking_lots_simulation.RepastSServiceConsumerProviderLauncher;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 import sajas.core.behaviours.Behaviour;
+import sajas.core.behaviours.TickerBehaviour;
 
-public abstract class DriverBehaviour extends Behaviour {
+public abstract class DriverBehaviour extends TickerBehaviour {
 
 	private static final long serialVersionUID = 4252257290496119984L;
 	/**
@@ -35,16 +36,12 @@ public abstract class DriverBehaviour extends Behaviour {
 	private GridPoint parkingDestination;
 	
 	/**
-	 * Flag that represents when this behaviour has ended
-	 */
-	private boolean done = false;
-	
-	/**
 	 * Parking facilities discarded
 	 */
 	private Set<GridPoint> parkingFacilitiesToAvoid;
 
-	public DriverBehaviour(DriverAgent driver, Grid<Object> mainGrid, Set<ParkingFacilityAgent> parkingFacilities) {
+	public DriverBehaviour(DriverAgent driver, int period, Grid<Object> mainGrid, Set<ParkingFacilityAgent> parkingFacilities) {
+		super(driver, period);
 		this.driverAgent = driver;
 		this.mainGrid = mainGrid;
 		this.parkingFacilities = parkingFacilities;
@@ -54,7 +51,7 @@ public abstract class DriverBehaviour extends Behaviour {
 	public abstract GridPoint getMostUsefulDestination(Set<GridPoint> parkingFacilitiesToAvoid) throws NoPositiveUtilityParkingFoundException;
 	
 	@Override
-	public void action() {
+	public void onTick() {
 		if(parkingDestination == null) {
 			try {
 				parkingDestination = getMostUsefulDestination(parkingFacilitiesToAvoid);	
@@ -77,7 +74,7 @@ public abstract class DriverBehaviour extends Behaviour {
 				// TODO random time
 
 				driverAgent.addBehaviour(new SleepBehaviour(driverAgent, parkingFacility, 5));
-				done = true;
+				this.stop();
 			}
 		} else { 
 			int x = directions(parkingDestination.getX(), agentPosition.getX());
@@ -85,11 +82,6 @@ public abstract class DriverBehaviour extends Behaviour {
 			
 			mainGrid.moveTo(driverAgent, agentPosition.getX() + x , agentPosition.getY() + y);
 		}
-	}
-
-	@Override
-	public boolean done() {
-		return done;
 	}
 	
 	/**

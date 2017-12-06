@@ -14,8 +14,8 @@ import repast.simphony.space.grid.GridPoint;
 public class GuidedDriverBehaviour extends DriverBehaviour {
 	private static final long serialVersionUID = -766675944062469676L;
 	
-	public GuidedDriverBehaviour(DriverAgent guidedDriver, Grid<Object> mainGrid, Set<ParkingFacilityAgent> parkingFacilities) {
-		super(guidedDriver, mainGrid, parkingFacilities);
+	public GuidedDriverBehaviour(DriverAgent guidedDriver, int period, Grid<Object> mainGrid, Set<ParkingFacilityAgent> parkingFacilities) {
+		super(guidedDriver, period, mainGrid, parkingFacilities);
 	}
 
 	@Override
