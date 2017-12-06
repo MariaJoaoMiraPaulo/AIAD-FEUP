@@ -93,7 +93,15 @@ public abstract class ParkSearchingBehaviour extends TickerBehaviour {
 	 */
 	private int getDirectionToMoveTo(int origin, int destination) {
 		int diff = destination - origin;
-		return diff == 0 ? 0 : diff / Math.abs(diff);
+		
+		if(diff == 0 ) {
+			return 0;
+		}
+		else if(diff > 0) {
+			return 1;
+		}
+		
+		return -1;
 	}
 
 	/**
