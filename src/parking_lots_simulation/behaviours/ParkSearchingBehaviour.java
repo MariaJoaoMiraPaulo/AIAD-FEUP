@@ -2,8 +2,8 @@ package parking_lots_simulation.behaviours;
 
 import java.util.HashSet;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 import java.util.Set;
+import java.util.logging.Level;
 
 import parking_lots_simulation.DriverAgent;
 import parking_lots_simulation.Launcher;
@@ -12,11 +12,10 @@ import parking_lots_simulation.exceptions.NoValidDestinationException;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 import sajas.core.Agent;
-import sajas.core.behaviours.TickerBehaviour;
+import sajas.core.behaviours.Behaviour;
 
-public abstract class ParkSearchingBehaviour extends TickerBehaviour {
-
-	private static final long serialVersionUID = -2526534492088802121L;
+public abstract class ParkSearchingBehaviour extends Behaviour {
+	private static final long serialVersionUID = 4672883813416528790L;
 
 	/**
 	 * Location of the favorite park
@@ -26,10 +25,11 @@ public abstract class ParkSearchingBehaviour extends TickerBehaviour {
 	protected Grid<Object> grid;
 	protected Set<ParkingFacilityAgent> fullParkingFacilities;
 	protected Set<ParkingFacilityAgent> parkingFacilities;
+	private boolean done = false;
 
 	public ParkSearchingBehaviour(DriverAgent driver, int period, Grid<Object> grid,
 			Set<ParkingFacilityAgent> parkingFacilities) {
-		super(driver, period);
+		super();
 		this.driver = driver;
 		this.grid = grid;
 		this.parkingFacilities = parkingFacilities;
@@ -40,13 +40,12 @@ public abstract class ParkSearchingBehaviour extends TickerBehaviour {
 			Set<ParkingFacilityAgent> fullParkingFacilities) throws NoValidDestinationException;
 
 	@Override
-	protected void onTick() {
+	public void action() {
 		if (parkingDestination == null) {
 			// check if utility is null
 			Entry<ParkingFacilityAgent, Double> mostUsefulDestination;
 			try {
-				mostUsefulDestination = getMostUsefulDestination(
-						fullParkingFacilities);
+				mostUsefulDestination = getMostUsefulDestination(fullParkingFacilities);
 			} catch (NoValidDestinationException e) {
 				Launcher.logger.log(Level.INFO, "No parking facility found.");
 				driver.doDelete();
@@ -73,7 +72,7 @@ public abstract class ParkSearchingBehaviour extends TickerBehaviour {
 			} else {
 				grid.moveTo(driver, parkingDestination.getLocation().getX(), parkingDestination.getLocation().getY());
 				parkingDestination.parkCar(driver);
-				this.stop();
+				this.done = true;
 			}
 		} else {
 			int x = getDirectionToMoveTo(agentPosition.getX(), parkingDestination.getLocation().getX());
@@ -81,6 +80,10 @@ public abstract class ParkSearchingBehaviour extends TickerBehaviour {
 
 			grid.moveTo(driver, agentPosition.getX() + x, agentPosition.getY() + y);
 		}
+	}
+
+	public boolean done() {
+		return done;
 	}
 
 	/**
@@ -93,7 +96,7 @@ public abstract class ParkSearchingBehaviour extends TickerBehaviour {
 	 */
 	private int getDirectionToMoveTo(int origin, int destination) {
 		int diff = destination - origin;
-		return (int)Math.signum(diff);
+		return (int) Math.signum(diff);
 	}
 
 	/**

@@ -2,13 +2,11 @@ package parking_lots_simulation;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import java.util.logging.*;
+import java.util.logging.Logger;
 
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
-import parking_lots_simulation.behaviours.DriverBehaviour;
 import parking_lots_simulation.behaviours.DynamicParkingFacilityBehaviour;
 import parking_lots_simulation.behaviours.ExplorerDriverBehaviour;
 import parking_lots_simulation.behaviours.GuidedDriverBehaviour;
@@ -29,6 +27,7 @@ import repast.simphony.space.grid.GridPoint;
 import repast.simphony.space.grid.SimpleGridAdder;
 import repast.simphony.space.grid.StrictBorders;
 import sajas.core.Runtime;
+import sajas.core.behaviours.SequentialBehaviour;
 import sajas.sim.repasts.RepastSLauncher;
 import sajas.wrapper.ContainerController;
 
@@ -128,8 +127,7 @@ public class Launcher extends RepastSLauncher {
 
 				GridPoint destination = generateRandomGridPoint();
 				DriverAgent explorerDriver = new ExplorerDriverAgent(id, destination, durationOfStay);
-				DriverBehaviour driverBehaviour = new DriverBehaviour(explorerDriver, driverPeriod, mainGrid,
-						parkingFacilities);
+				SequentialBehaviour driverBehaviour = new SequentialBehaviour();
 				driverBehaviour.addSubBehaviour(
 						new ExplorerDriverBehaviour(explorerDriver, driverPeriod, mainGrid, parkingFacilities));
 
@@ -153,8 +151,7 @@ public class Launcher extends RepastSLauncher {
 				GridPoint destination = generateRandomGridPoint();
 				DriverAgent guidedDriver = new GuidedDriverAgent(id, destination, durationOfStay);
 
-				DriverBehaviour driverBehaviour = new DriverBehaviour(guidedDriver, driverPeriod, mainGrid,
-						parkingFacilities);
+				SequentialBehaviour driverBehaviour = new SequentialBehaviour();
 				driverBehaviour.addSubBehaviour(
 						new GuidedDriverBehaviour(guidedDriver, driverPeriod, mainGrid, parkingFacilities));
 				driverBehaviour.addSubBehaviour(new SleepBehaviour(guidedDriver, (int) durationOfStay * TICKS_IN_HOUR));

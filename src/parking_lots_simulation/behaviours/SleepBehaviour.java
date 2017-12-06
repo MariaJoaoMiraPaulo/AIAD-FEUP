@@ -13,7 +13,6 @@ public class SleepBehaviour extends Behaviour {
 	 */
 	private static final long serialVersionUID = -3142786094110924472L;
 
-	private boolean done = false;
 	private DriverAgent driver;
 	private int numberOfTicksRemaining;
 
@@ -25,11 +24,10 @@ public class SleepBehaviour extends Behaviour {
 	@Override
 	public void action() {
 		if (numberOfTicksRemaining == 0) {
-			if(!driver.isParked()) {
+			if (!driver.isParked()) {
 				System.err.println("Driver must be parked when this behaviour is created");
 			}
 			driver.getCurrentParkingFacility().removeCar(driver);
-			done = true;
 			Launcher.logger.log(Level.INFO, "Driver parking time exceeded. Exiting system...");
 			driver.doDelete();
 		} else {
@@ -39,7 +37,7 @@ public class SleepBehaviour extends Behaviour {
 
 	@Override
 	public boolean done() {
-		return done;
+		return false;
 	}
 
 }
