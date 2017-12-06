@@ -1,12 +1,11 @@
 package parking_lots_simulation.behaviours;
 
 import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import parking_lots_simulation.DriverAgent;
-import parking_lots_simulation.NoPositiveUtilityParkingFoundException;
 import parking_lots_simulation.ParkingFacilityAgent;
-import parking_lots_simulation.Launcher;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 import sajas.core.behaviours.TickerBehaviour;
@@ -49,17 +48,22 @@ public abstract class DriverBehaviour extends TickerBehaviour {
 		this.parkingFacilitiesToAvoid = new HashSet<>();
 	}
 
-	public abstract GridPoint getMostUsefulDestination(Set<GridPoint> parkingFacilitiesToAvoid)
-			throws NoPositiveUtilityParkingFoundException;
+	public abstract Entry<GridPoint, Double> getMostUsefulDestination(Set<GridPoint> parkingFacilitiesToAvoid);
 
 	@Override
 	public void onTick() {
 		if (parkingDestination == null) {
-			try {
-				parkingDestination = getMostUsefulDestination(parkingFacilitiesToAvoid);
-			} catch (NoPositiveUtilityParkingFoundException e) {
-				// TODO: Exit system
+			// check if utility is null
+			Entry<GridPoint, Double> mostUsefulDestination = getMostUsefulDestination(parkingFacilitiesToAvoid);
+			if (mostUsefulDestination.getValue() < 0) {
+				// driver leaves the system
+				// TODO: subtract utility from global value
+				System.out.println(mostUsefulDestination.getValue());
+				driverAgent.doDelete();
 			}
+
+			parkingDestination = mostUsefulDestination.getKey();
+
 		}
 
 		GridPoint agentPosition = mainGrid.getLocation(driverAgent);
@@ -105,21 +109,16 @@ public abstract class DriverBehaviour extends TickerBehaviour {
 		return -1;
 	}
 
-	public double getUtility(double distance_to_destination, double price) {
+	protected double getUtility(ParkingFacilityAgent parkingFacility) {
 		double u = 0.9;
 		double v = 0.9;
 
-		double maxUtility = driverAgent.getPaymentEmphasis()
-				* Math.pow(Launcher.MAX_PAYMENT, u)
-				- driverAgent.getWalkDistanceEmphasis()
-						* Math.pow(Launcher.MAX_EFFORT, v);
+		double utility = driverAgent.getUtilityForArrivingAtDestination();
+		double distanceToDestination = mainGrid.getDistance(driverAgent.getDestination(),
+				mainGrid.getLocation(parkingFacility));
 
-		double utility = 0 + (double) (Math.random() * maxUtility);
-		double beta = 0 + (double) (Math.random() * 1);
-		double alpha = 0 + (double) (Math.random() * 1);
-
-		double payment = alpha * price * driverAgent.getDurationOfStay();
-		double effort = beta * distance_to_destination;
+		double payment = DriverAgent.alpha * parkingFacility.getPrice() * driverAgent.getDurationOfStay();
+		double effort = DriverAgent.beta * distanceToDestination;
 
 		return utility - driverAgent.getPaymentEmphasis() * Math.pow(payment, u)
 				- driverAgent.getWalkDistanceEmphasis() * Math.pow(effort, v);

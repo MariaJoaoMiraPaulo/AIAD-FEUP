@@ -78,7 +78,7 @@ public class Launcher extends RepastSLauncher {
 		GridBuilderParameters<Object> gridBuilderParameters = new GridBuilderParameters<Object>(new StrictBorders(),
 				new SimpleGridAdder<Object>(), true, GRID_WIDTH_SIZE, GRID_HEIGHT_SIZE);
 		mainGrid = factory.createGrid("Main Grid", context, gridBuilderParameters);
-		
+
 		return super.build(context);
 	}
 
@@ -96,7 +96,7 @@ public class Launcher extends RepastSLauncher {
 				parkingFacilities.add(staticParkingFacility);
 				staticParkingFacility.addBehaviour(new StaticParkingFacilityBehaviour(staticParkingFacility, mainGrid));
 				mainContainer.acceptNewAgent("StaticParkingFacility" + i, staticParkingFacility).start();
-				
+
 				GridPoint start = generateRandomGridPoint();
 				mainGrid.moveTo(staticParkingFacility, start.getX(), start.getY());
 			}
@@ -120,7 +120,8 @@ public class Launcher extends RepastSLauncher {
 				GridPoint destination = generateRandomGridPoint();
 				DriverAgent explorerDriver = new ExplorerDriverAgent(id, destination, 3);
 
-				explorerDriver.addBehaviour(new ExplorerDriverBehaviour(explorerDriver, driverPeriod, mainGrid, parkingFacilities));
+				explorerDriver.addBehaviour(
+						new ExplorerDriverBehaviour(explorerDriver, driverPeriod, mainGrid, parkingFacilities));
 
 				mainContainer.acceptNewAgent(id, explorerDriver).start();
 
@@ -135,7 +136,8 @@ public class Launcher extends RepastSLauncher {
 				GridPoint destination = generateRandomGridPoint();
 				DriverAgent guidedDriver = new GuidedDriverAgent(id, destination, 3);
 
-				guidedDriver.addBehaviour(new GuidedDriverBehaviour(guidedDriver, driverPeriod, mainGrid, parkingFacilities));
+				guidedDriver.addBehaviour(
+						new GuidedDriverBehaviour(guidedDriver, driverPeriod, mainGrid, parkingFacilities));
 
 				mainContainer.acceptNewAgent(id, guidedDriver).start();
 

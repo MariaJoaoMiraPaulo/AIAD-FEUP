@@ -2,10 +2,11 @@ package parking_lots_simulation.behaviours;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Set;
 
 import parking_lots_simulation.DriverAgent;
-import parking_lots_simulation.NoPositiveUtilityParkingFoundException;
 import parking_lots_simulation.ParkingFacilityAgent;
 import parking_lots_simulation.comparators.DistanceComparator;
 import repast.simphony.space.grid.Grid;
@@ -18,25 +19,29 @@ public class ExplorerDriverBehaviour extends DriverBehaviour {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public ExplorerDriverBehaviour(DriverAgent driverAgent, int period, Grid<Object> mainGrid, Set<ParkingFacilityAgent> parkingFacilities) {
+	public ExplorerDriverBehaviour(DriverAgent driverAgent, int period, Grid<Object> mainGrid,
+			Set<ParkingFacilityAgent> parkingFacilities) {
 		super(driverAgent, period, mainGrid, parkingFacilities);
 	}
 
 	@Override
-	public GridPoint getMostUsefulDestination(Set<GridPoint> parkingFacilitiesToAvoid)
-			throws NoPositiveUtilityParkingFoundException {
-		
-		Set<GridPoint> validFacilities = new HashSet<>();
+	public Entry<GridPoint, Double> getMostUsefulDestination(Set<GridPoint> parkingFacilitiesToAvoid) {
 
-		// Adds all parking facilities not present in parkingFacilitiesToAvoid to the Set
-		for(ParkingFacilityAgent parkingFacility : parkingFacilities) {
+		Set<ParkingFacilityAgent> validFacilities = new HashSet<>();
+
+		// Adds all parking facilities not present in parkingFacilitiesToAvoid to the
+		// Set
+		for (ParkingFacilityAgent parkingFacility : parkingFacilities) {
 			GridPoint facilityLocation = mainGrid.getLocation(parkingFacility);
-			if(!parkingFacilitiesToAvoid.contains(facilityLocation)) {
-				validFacilities.add(facilityLocation);
+			if (!parkingFacilitiesToAvoid.contains(facilityLocation)) {
+				validFacilities.add(parkingFacility);
 			}
 		}
-		
-		return Collections.min(validFacilities, new DistanceComparator(mainGrid, driverAgent));
+
+		ParkingFacilityAgent destination = Collections.min(validFacilities,
+				new DistanceComparator(mainGrid, driverAgent));
+
+		return new SimpleEntry<GridPoint, Double>(mainGrid.getLocation(destination), getUtility(destination));
 	}
 
 }

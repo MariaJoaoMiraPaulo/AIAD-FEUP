@@ -28,12 +28,11 @@ public class StaticParkingFacilityBehaviour extends Behaviour {
 
 		Iterator<DriverAgent> it = gridCell.items().iterator();
 
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			DriverAgent driver = it.next();
 			parkingFacility.parkCar(driver);
 		}
 	}
-
 
 	@Override
 	public boolean done() {

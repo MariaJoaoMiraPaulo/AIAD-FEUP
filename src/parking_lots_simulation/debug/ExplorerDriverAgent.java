@@ -8,8 +8,8 @@ import repast.simphony.space.grid.GridPoint;
  */
 public class ExplorerDriverAgent extends DriverAgent {
 
-	public ExplorerDriverAgent(String id, GridPoint destination, int durantionOfStay) {
-		super(id, destination, durantionOfStay);
+	public ExplorerDriverAgent(String id, GridPoint destination, int durationOfStay) {
+		super(id, destination, durationOfStay);
 	}
 
 }
