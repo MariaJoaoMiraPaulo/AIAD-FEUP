@@ -28,7 +28,7 @@ import sajas.core.Runtime;
 import sajas.sim.repasts.RepastSLauncher;
 import sajas.wrapper.ContainerController;
 
-public class RepastSServiceConsumerProviderLauncher extends RepastSLauncher {
+public class Launcher extends RepastSLauncher {
 
 	public int staticParkingFacilityCount = 5;
 	public int dynamicParkingFacilityCount = 5;

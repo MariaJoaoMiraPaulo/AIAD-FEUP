@@ -15,8 +15,8 @@ public class DriverAgent extends Agent {
 	public DriverAgent(String id, GridPoint destination, int duration_of_stay ) {
 		this.id = id;
 		this.durationOfStay = duration_of_stay;
-		this.paymentEmphasis = 1 + (double)(Math.random() * 1.5); //emphasis of agent i on paying a certain amount of money 
-		this.walkDistanceEmphasis = 1 + (double)(Math.random() * 1.5); //emphasis of agent i on  walking a certain distance
+		this.paymentEmphasis = 1 + Math.random() * (1.5 - 1); //emphasis of agent i on paying a certain amount of money 
+		this.walkDistanceEmphasis = 1 + Math.random() * (1.5 - 1); //emphasis of agent i on  walking a certain distance
 		this.destination = destination;
 	}
 	
@@ -42,7 +42,7 @@ public class DriverAgent extends Agent {
 		return destination;
 	}
 	
-	public int getDuration_of_stay() {
+	public int getDurationOfStay() {
 		return durationOfStay;
 	}
 
