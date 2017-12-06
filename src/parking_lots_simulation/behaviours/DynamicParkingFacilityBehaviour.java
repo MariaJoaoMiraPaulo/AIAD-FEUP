@@ -22,14 +22,14 @@ public class DynamicParkingFacilityBehaviour extends Behaviour {
 		this.parkingFacility = parkingFacility;
 		this.mainGrid = mainGrid;
 	}
-	
+
 	@Override
 	public void action() {
 		GridCell<DriverAgent> gridCell = new GridCell<>(mainGrid.getLocation(parkingFacility), DriverAgent.class);
 
 		Iterator<DriverAgent> it = gridCell.items().iterator();
 
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			DriverAgent driver = it.next();
 			parkingFacility.parkCar(driver);
 		}

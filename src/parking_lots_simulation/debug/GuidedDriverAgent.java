@@ -8,7 +8,7 @@ import repast.simphony.space.grid.GridPoint;
  */
 public class GuidedDriverAgent extends DriverAgent {
 
-	public GuidedDriverAgent(String id, GridPoint destination, int durationOfStay) {
+	public GuidedDriverAgent(String id, GridPoint destination, double durationOfStay) {
 		super(id, destination, durationOfStay);
 	}
 }

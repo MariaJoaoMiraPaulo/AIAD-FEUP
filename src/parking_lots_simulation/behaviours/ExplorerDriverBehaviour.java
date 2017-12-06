@@ -1,18 +1,18 @@
 package parking_lots_simulation.behaviours;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map.Entry;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Set;
 
 import parking_lots_simulation.DriverAgent;
 import parking_lots_simulation.ParkingFacilityAgent;
 import parking_lots_simulation.comparators.DistanceComparator;
+import parking_lots_simulation.exceptions.NoValidDestinationException;
 import repast.simphony.space.grid.Grid;
-import repast.simphony.space.grid.GridPoint;
 
-public class ExplorerDriverBehaviour extends DriverBehaviour {
+public class ExplorerDriverBehaviour extends ParkSearchingBehaviour {
 
 	/**
 	 * 
@@ -25,23 +25,26 @@ public class ExplorerDriverBehaviour extends DriverBehaviour {
 	}
 
 	@Override
-	public Entry<GridPoint, Double> getMostUsefulDestination(Set<GridPoint> parkingFacilitiesToAvoid) {
+	public Entry<ParkingFacilityAgent, Double> getMostUsefulDestination(
+			Set<ParkingFacilityAgent> fullParkingFacilities) throws NoValidDestinationException {
 
 		Set<ParkingFacilityAgent> validFacilities = new HashSet<>();
 
 		// Adds all parking facilities not present in parkingFacilitiesToAvoid to the
 		// Set
 		for (ParkingFacilityAgent parkingFacility : parkingFacilities) {
-			GridPoint facilityLocation = mainGrid.getLocation(parkingFacility);
-			if (!parkingFacilitiesToAvoid.contains(facilityLocation)) {
+			if (!fullParkingFacilities.contains(parkingFacility)) {
 				validFacilities.add(parkingFacility);
 			}
 		}
 
-		ParkingFacilityAgent destination = Collections.min(validFacilities,
-				new DistanceComparator(mainGrid, driverAgent));
+		if (validFacilities.size() == 0) {
+			throw new NoValidDestinationException();
+		}
 
-		return new SimpleEntry<GridPoint, Double>(mainGrid.getLocation(destination), getUtility(destination));
+		ParkingFacilityAgent destination = Collections.min(validFacilities, new DistanceComparator(grid, driver));
+
+		return new SimpleEntry<ParkingFacilityAgent, Double>(destination, getUtility(destination));
 	}
 
 }

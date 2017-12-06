@@ -3,12 +3,16 @@ package parking_lots_simulation;
 import java.util.HashSet;
 import java.util.Set;
 
+import java.util.logging.*;
+
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
+import parking_lots_simulation.behaviours.DriverBehaviour;
 import parking_lots_simulation.behaviours.DynamicParkingFacilityBehaviour;
 import parking_lots_simulation.behaviours.ExplorerDriverBehaviour;
 import parking_lots_simulation.behaviours.GuidedDriverBehaviour;
+import parking_lots_simulation.behaviours.SleepBehaviour;
 import parking_lots_simulation.behaviours.StaticParkingFacilityBehaviour;
 import parking_lots_simulation.debug.DynamicParkingFacilityAgent;
 import parking_lots_simulation.debug.ExplorerDriverAgent;
@@ -30,11 +34,13 @@ import sajas.wrapper.ContainerController;
 
 public class Launcher extends RepastSLauncher {
 
+	public static Logger logger = Logger.getGlobal();
 	public int staticParkingFacilityCount = 5;
 	public int dynamicParkingFacilityCount = 5;
 	public int explorerDriverCount = 10;
 	public int guidedDriverCount = 10;
 	public int driverPeriod = 100;
+	public static final int TICKS_IN_HOUR = 600000;
 	public static final int GRID_WIDTH_SIZE = 50;
 	public static final int GRID_HEIGHT_SIZE = 50;
 	public static final int MAX_PRICE = 5; // per hour
@@ -92,36 +98,44 @@ public class Launcher extends RepastSLauncher {
 
 			// create static parking facilities
 			for (int i = 0; i < staticParkingFacilityCount; i++) {
-				StaticParkingFacilityAgent staticParkingFacility = new StaticParkingFacilityAgent(1, 5);
+				GridPoint location = generateRandomGridPoint();
+				StaticParkingFacilityAgent staticParkingFacility = new StaticParkingFacilityAgent(location, 1, 5);
 				parkingFacilities.add(staticParkingFacility);
 				staticParkingFacility.addBehaviour(new StaticParkingFacilityBehaviour(staticParkingFacility, mainGrid));
 				mainContainer.acceptNewAgent("StaticParkingFacility" + i, staticParkingFacility).start();
 
-				GridPoint start = generateRandomGridPoint();
-				mainGrid.moveTo(staticParkingFacility, start.getX(), start.getY());
+				mainGrid.moveTo(staticParkingFacility, location.getX(), location.getY());
 			}
 
 			// create dynamic parking facilities
 			for (int i = 0; i < dynamicParkingFacilityCount; i++) {
-				DynamicParkingFacilityAgent dynamicParkingFacility = new DynamicParkingFacilityAgent(1, 10);
+				GridPoint location = generateRandomGridPoint();
+				DynamicParkingFacilityAgent dynamicParkingFacility = new DynamicParkingFacilityAgent(location, 1, 10);
 				parkingFacilities.add(dynamicParkingFacility);
 				dynamicParkingFacility
 						.addBehaviour(new DynamicParkingFacilityBehaviour(dynamicParkingFacility, mainGrid));
 				mainContainer.acceptNewAgent("DynamicParkingFacility" + i, dynamicParkingFacility).start();
 
-				GridPoint start = generateRandomGridPoint();
-				mainGrid.moveTo(dynamicParkingFacility, start.getX(), start.getY());
+				mainGrid.moveTo(dynamicParkingFacility, location.getX(), location.getY());
 			}
 
 			// create explorer driver agents
 			for (int i = 0; i < explorerDriverCount; i++) {
 				String id = "ExplorerDriver" + i;
 
-				GridPoint destination = generateRandomGridPoint();
-				DriverAgent explorerDriver = new ExplorerDriverAgent(id, destination, 3);
+				// Randomized from 7.5 to 8.5 hours. TODO: Change this according to day of week
+				double durationOfStay = 7.5 + Math.random();
 
-				explorerDriver.addBehaviour(
+				GridPoint destination = generateRandomGridPoint();
+				DriverAgent explorerDriver = new ExplorerDriverAgent(id, destination, durationOfStay);
+				DriverBehaviour driverBehaviour = new DriverBehaviour(explorerDriver, driverPeriod, mainGrid,
+						parkingFacilities);
+				driverBehaviour.addSubBehaviour(
 						new ExplorerDriverBehaviour(explorerDriver, driverPeriod, mainGrid, parkingFacilities));
+
+				driverBehaviour
+						.addSubBehaviour(new SleepBehaviour(explorerDriver, (int) durationOfStay * TICKS_IN_HOUR));
+				explorerDriver.addBehaviour(driverBehaviour);
 
 				mainContainer.acceptNewAgent(id, explorerDriver).start();
 
@@ -133,11 +147,18 @@ public class Launcher extends RepastSLauncher {
 			for (int i = 0; i < guidedDriverCount; i++) {
 				String id = "GuidedDriver" + i;
 
-				GridPoint destination = generateRandomGridPoint();
-				DriverAgent guidedDriver = new GuidedDriverAgent(id, destination, 3);
+				// Randomized from 7.5 to 8.5 hours. TODO: Change this according to day of week
+				double durationOfStay = 7.5 + Math.random();
 
-				guidedDriver.addBehaviour(
+				GridPoint destination = generateRandomGridPoint();
+				DriverAgent guidedDriver = new GuidedDriverAgent(id, destination, durationOfStay);
+
+				DriverBehaviour driverBehaviour = new DriverBehaviour(guidedDriver, driverPeriod, mainGrid,
+						parkingFacilities);
+				driverBehaviour.addSubBehaviour(
 						new GuidedDriverBehaviour(guidedDriver, driverPeriod, mainGrid, parkingFacilities));
+				driverBehaviour.addSubBehaviour(new SleepBehaviour(guidedDriver, (int) durationOfStay * TICKS_IN_HOUR));
+				guidedDriver.addBehaviour(driverBehaviour);
 
 				mainContainer.acceptNewAgent(id, guidedDriver).start();
 

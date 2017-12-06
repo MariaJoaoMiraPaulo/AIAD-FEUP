@@ -1,6 +1,5 @@
 package parking_lots_simulation.behaviours;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -8,10 +7,10 @@ import java.util.Set;
 
 import parking_lots_simulation.DriverAgent;
 import parking_lots_simulation.ParkingFacilityAgent;
+import parking_lots_simulation.exceptions.NoValidDestinationException;
 import repast.simphony.space.grid.Grid;
-import repast.simphony.space.grid.GridPoint;
 
-public class GuidedDriverBehaviour extends DriverBehaviour {
+public class GuidedDriverBehaviour extends ParkSearchingBehaviour {
 	private static final long serialVersionUID = -766675944062469676L;
 
 	public GuidedDriverBehaviour(DriverAgent guidedDriver, int period, Grid<Object> mainGrid,
@@ -20,20 +19,21 @@ public class GuidedDriverBehaviour extends DriverBehaviour {
 	}
 
 	@Override
-	public Entry<GridPoint, Double> getMostUsefulDestination(Set<GridPoint> parkingFacilitiesToAvoid) {
+	public Entry<ParkingFacilityAgent, Double> getMostUsefulDestination(
+			Set<ParkingFacilityAgent> fullParkingFacilities) throws NoValidDestinationException {
 
 		Map<ParkingFacilityAgent, Double> validFacilities = new HashMap<ParkingFacilityAgent, Double>();
 
 		for (ParkingFacilityAgent parkingFacility : parkingFacilities) {
-			validFacilities.put(parkingFacility, getUtility(parkingFacility));
+			if (!fullParkingFacilities.contains(parkingFacility)) {
+				validFacilities.put(parkingFacility, getUtility(parkingFacility));
+			}
 		}
 
-		Entry<ParkingFacilityAgent, Double> maxEntry = getMaxUtilityPark(validFacilities);
-		return new SimpleEntry<GridPoint, Double>(mainGrid.getLocation(maxEntry.getKey()), maxEntry.getValue());
-
+		return getMaxUtilityPark(validFacilities);
 	}
 
-	public Entry<ParkingFacilityAgent, Double> getMaxUtilityPark(Map<ParkingFacilityAgent, Double> parkingFacilities) {
+	public Entry<ParkingFacilityAgent, Double> getMaxUtilityPark(Map<ParkingFacilityAgent, Double> parkingFacilities) throws NoValidDestinationException {
 
 		Entry<ParkingFacilityAgent, Double> maxEntry = null;
 
@@ -43,6 +43,9 @@ public class GuidedDriverBehaviour extends DriverBehaviour {
 			}
 		}
 
+		if(maxEntry == null) {
+			throw new NoValidDestinationException();
+		}
 		return maxEntry;
 	}
 

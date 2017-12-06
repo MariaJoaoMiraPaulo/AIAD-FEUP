@@ -10,7 +10,13 @@ public class DriverAgent extends Agent {
 
 	private GridPoint destination;
 	private String id;
-	private int durationOfStay;
+	private double durationOfStay;
+	
+	/*
+	 * The parking facility the driver is currently parked in.
+	 * Null if the agent is not parked.
+	 */
+	private ParkingFacilityAgent currentParkingFacility;
 
 	/*
 	 * Emphasis of agent on paying a certain amount of money
@@ -27,7 +33,7 @@ public class DriverAgent extends Agent {
 	 */
 	private double utilityForArrivingAtDestination;
 
-	public DriverAgent(String id, GridPoint destination, int durationOfStay) {
+	public DriverAgent(String id, GridPoint destination, double durationOfStay) {
 		this.id = id;
 		this.durationOfStay = durationOfStay;
 		this.destination = destination;
@@ -59,7 +65,7 @@ public class DriverAgent extends Agent {
 		return destination;
 	}
 
-	public int getDurationOfStay() {
+	public double getDurationOfStay() {
 		return durationOfStay;
 	}
 
@@ -78,5 +84,17 @@ public class DriverAgent extends Agent {
 
 	public double getUtilityForArrivingAtDestination() {
 		return utilityForArrivingAtDestination;
+	}
+
+	public ParkingFacilityAgent getCurrentParkingFacility() {
+		return currentParkingFacility;
+	}
+
+	public void setCurrentParkingFacility(ParkingFacilityAgent currentParkingFacility) {
+		this.currentParkingFacility = currentParkingFacility;
+	}
+
+	public boolean isParked() {
+		return currentParkingFacility != null;
 	}
 }

@@ -3,6 +3,7 @@ package parking_lots_simulation;
 import java.util.HashMap;
 import java.util.Map;
 
+import repast.simphony.space.grid.GridPoint;
 import sajas.core.Agent;
 
 public class ParkingFacilityAgent extends Agent {
@@ -10,8 +11,14 @@ public class ParkingFacilityAgent extends Agent {
 	private Map<String, DriverAgent> parkedCars = new HashMap<>();
 	private int capacity;
 	private double price;
+	private GridPoint location;
 
-	public ParkingFacilityAgent(int capacity, double price) {
+	public GridPoint getLocation() {
+		return location;
+	}
+
+	public ParkingFacilityAgent(GridPoint location, int capacity, double price) {
+		this.location = location;
 		this.capacity = capacity;
 		this.price = price;
 	}
@@ -32,6 +39,7 @@ public class ParkingFacilityAgent extends Agent {
 	 */
 	public void parkCar(DriverAgent driverAgent) {
 		parkedCars.put(driverAgent.getId(), driverAgent);
+		driverAgent.setCurrentParkingFacility(this);
 	}
 
 	/**
@@ -39,6 +47,7 @@ public class ParkingFacilityAgent extends Agent {
 	 */
 	public void removeCar(DriverAgent driverAgent) {
 		parkedCars.remove(driverAgent.getId());
+		driverAgent.setCurrentParkingFacility(null);
 	}
 
 	/**
