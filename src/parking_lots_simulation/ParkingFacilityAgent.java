@@ -3,6 +3,7 @@ package parking_lots_simulation;
 import java.util.HashMap;
 import java.util.Map;
 
+import gov.nasa.worldwind.symbology.milstd2525.graphics.lines.InfiltrationLane;
 import repast.simphony.space.grid.GridPoint;
 import sajas.core.Agent;
 
@@ -17,6 +18,7 @@ public class ParkingFacilityAgent extends Agent {
 	private GridPoint location;
 	private double weeklyRevenue;
 	private String name;
+	private double inflationParameter;
 
 	public ParkingFacilityAgent(String name, GridPoint location, int capacity, double pricePerHour, double maxPricePerDay) {
 		this.location = location;
@@ -27,6 +29,7 @@ public class ParkingFacilityAgent extends Agent {
 		this.minMaxPricePerDay = this.maxPricePerDay/2;
 		this.weeklyRevenue = 0;
 		this.name = name;
+		this.inflationParameter = 1;
 	}
 
 	/**
@@ -46,7 +49,19 @@ public class ParkingFacilityAgent extends Agent {
 	public void parkCar(DriverAgent driverAgent) {
 		parkedCars.put(driverAgent.getId(), driverAgent);
 		driverAgent.setCurrentParkingFacility(this);
-		weeklyRevenue += driverAgent.getDurationOfStay() * pricePerHour;
+		weeklyRevenue += (inflationParameter == 1) ? driverAgent.getDurationOfStay() * pricePerHour
+				: calculatePrice(driverAgent.getDurationOfStay(), pricePerHour);
+	}
+	
+	/**
+	 * Gets the price to pay in function of inflation
+	 * @param durationOfStay
+	 * @param currentPricePerHour
+	 * @return total to pay
+	 */
+	public double calculatePrice(double durationOfStay, double currentPricePerHour) {
+		return (durationOfStay <= 1) ? currentPricePerHour * durationOfStay 
+				: calculatePrice(--durationOfStay, currentPricePerHour + (inflationParameter - 1)*currentPricePerHour) + currentPricePerHour;
 	}
 
 	/**
