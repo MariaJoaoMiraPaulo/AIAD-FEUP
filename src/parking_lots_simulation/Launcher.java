@@ -108,57 +108,14 @@ public class Launcher extends RepastSLauncher {
 	public void launchAgents() {
 
 		try {
-
-/*
-			// create static parking facilities
-			for (int i = 0; i < staticParkingFacilityCount; i++) {
-				GridPoint location = generateRandomGridPoint();
-				
-				// TODO change to CSV file
-				Random priceDecimalRandomGenerator = new Random();
-				Random priceIntRandomGenerator = new Random();
-				double price = priceDecimalRandomGenerator.nextFloat() + priceIntRandomGenerator.nextInt(2) + 1;
-				double maxPricePerDay = priceDecimalRandomGenerator.nextFloat() + priceIntRandomGenerator.nextInt(13) + 9;
-				
-				StaticParkingFacilityAgent staticParkingFacility = new StaticParkingFacilityAgent(location, 1, price, maxPricePerDay);
-				parkingFacilities.add(staticParkingFacility);
-				staticParkingFacility.addBehaviour(new StaticParkingFacilityBehaviour(staticParkingFacility, currentSchedule));
-				mainContainer.acceptNewAgent("StaticParkingFacility" + i, staticParkingFacility).start();
-
-				mainGrid.moveTo(staticParkingFacility, location.getX(), location.getY());
-			}
-
-			// create dynamic parking facilities
-			for (int i = 0; i < dynamicParkingFacilityCount; i++) {
-				GridPoint location = generateRandomGridPoint();
-				
-				// TODO change to CSV file
-				Random priceDecimalRandomGenerator = new Random();
-				Random priceIntRandomGenerator = new Random();
-				double price = priceDecimalRandomGenerator.nextFloat() + priceIntRandomGenerator.nextInt(2) + 1;
-				double maxPricePerDay = priceDecimalRandomGenerator.nextFloat() + priceIntRandomGenerator.nextInt(13) + 9;
-				
-				DynamicParkingFacilityAgent dynamicParkingFacility = new DynamicParkingFacilityAgent(location, 1, price, maxPricePerDay);
-				parkingFacilities.add(dynamicParkingFacility);
-				dynamicParkingFacility
-						.addBehaviour(new DynamicParkingFacilityBehaviour(dynamicParkingFacility, currentSchedule));
-				mainContainer.acceptNewAgent("DynamicParkingFacility" + i, dynamicParkingFacility).start();
-
-				mainGrid.moveTo(dynamicParkingFacility, location.getX(), location.getY());
-			}*/
 			
-			//Initialize Dynamic Parking Facilities
-			//initializeDynamicParkingFacility();
-			
-			if(showDynamicParks) {
+			// Verifying if the user wants dynamic parks or static parks
+			if(showDynamicParks) { // Initialize Dynamic Parking Facilities
 				initializeDynamicParkingFacility();
 			}
-			else {
+			else { // Initialize Static Parking Facilities
 				initializeStaticParkingFacility();
 			}
-			
-			//Initialize Static Parking Facilities
-			//initializeStaticParkingFacility();
 
 			// create explorer driver agents
 			for (int i = 0; i < explorerDriverCount; i++) {

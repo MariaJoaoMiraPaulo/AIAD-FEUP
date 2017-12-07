@@ -35,9 +35,7 @@ public class DynamicParkingFacilityBehaviour extends ParkRevenueBehaviour {
 		}
 		else gamma = currentRevenue / lastWeekRevenue;
 		
-		System.out.println("Old price: " + parkingFacility.getPricePerHour());
 		updateWasPositive = parkingFacility.updatePricePerHour(updateParameter(parkingFacility.getPricePerHour()));
-		System.out.println("New price: " + parkingFacility.getPricePerHour());
 		
 		lastWeekRevenue = currentRevenue;
 	}
