@@ -1,63 +1,52 @@
 package parking_lots_simulation.behaviours;
 
-import parking_lots_simulation.Launcher;
 import parking_lots_simulation.ParkingFacilityAgent;
 import repast.simphony.engine.schedule.ISchedule;
-import repast.simphony.space.grid.Grid;
-import sajas.core.behaviours.Behaviour;
 
-public class DynamicParkingFacilityBehaviour extends Behaviour {
+public class DynamicParkingFacilityBehaviour extends ParkRevenueBehaviour {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8556683381412545535L;
 	private static final double DELTA = 0.3;
 	private static final int FIRST_WEEK = 1;
-	private Grid<Object> mainGrid;
-	private ParkingFacilityAgent parkingFacility;
-	private ISchedule currentSchedule;
+
 	private boolean updateWasPositive;
 	private double lastWeekRevenue;
+	private double gamma;
 
-	public DynamicParkingFacilityBehaviour(ParkingFacilityAgent parkingFacility, Grid<Object> mainGrid, ISchedule currentSchedule) {
-		super();
-		this.parkingFacility = parkingFacility;
-		this.mainGrid = mainGrid;
-		this.currentSchedule = currentSchedule;
+	public DynamicParkingFacilityBehaviour(ParkingFacilityAgent parkingFacility,
+			ISchedule currentSchedule) {
+		super(parkingFacility, currentSchedule);
+
 		this.updateWasPositive = true;
+		this.gamma = 1;
 	}
 
 	@Override
-	public void action() {
-		double totalTicks = currentSchedule.getTickCount();
+	public void updateValues(double currentWeek, double atualRevenue) {
 		
-		if(totalTicks % Launcher.TICKS_IN_WEEK != 0.0) {
-			return;
-		}
-		
-		double currentWeek = totalTicks/Launcher.TICKS_IN_WEEK;
-		double atualRevenue = parkingFacility.getWeeklyRevenue();
 		if(currentWeek == FIRST_WEEK) {
 			lastWeekRevenue = atualRevenue;
 		}
+		if(atualRevenue == 0) {
+			gamma = 0;
+		}
+		else gamma = atualRevenue / lastWeekRevenue;
+		
+		parkingFacility.setPricePerHour(updateParameter(parkingFacility.getPricePerHour()));
 		
 		lastWeekRevenue = atualRevenue;
-		parkingFacility.setWeeklyRevenue(0);
-		
-	}
-
-	@Override
-	public boolean done() {
-		return false;
 	}
 	
 	public double updateParameter(double atualParameter) {
-		
+
 		if(updateWasPositive) {
-			return atualParameter + DELTA * atualParameter;
+			return atualParameter + DELTA * atualParameter * (gamma - 1);
 		}
-		
-		return atualParameter - DELTA * atualParameter;
+
+		return atualParameter - DELTA * atualParameter * (gamma - 1);
 	}
+
 }

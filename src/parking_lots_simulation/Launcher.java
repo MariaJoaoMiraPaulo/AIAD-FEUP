@@ -117,7 +117,7 @@ public class Launcher extends RepastSLauncher {
 				
 				StaticParkingFacilityAgent staticParkingFacility = new StaticParkingFacilityAgent(location, 1, price, maxPricePerDay);
 				parkingFacilities.add(staticParkingFacility);
-				staticParkingFacility.addBehaviour(new StaticParkingFacilityBehaviour(staticParkingFacility, mainGrid));
+				staticParkingFacility.addBehaviour(new StaticParkingFacilityBehaviour(staticParkingFacility, currentSchedule));
 				mainContainer.acceptNewAgent("StaticParkingFacility" + i, staticParkingFacility).start();
 
 				mainGrid.moveTo(staticParkingFacility, location.getX(), location.getY());
@@ -136,7 +136,7 @@ public class Launcher extends RepastSLauncher {
 				DynamicParkingFacilityAgent dynamicParkingFacility = new DynamicParkingFacilityAgent(location, 1, price, maxPricePerDay);
 				parkingFacilities.add(dynamicParkingFacility);
 				dynamicParkingFacility
-						.addBehaviour(new DynamicParkingFacilityBehaviour(dynamicParkingFacility, mainGrid, currentSchedule));
+						.addBehaviour(new DynamicParkingFacilityBehaviour(dynamicParkingFacility, currentSchedule));
 				mainContainer.acceptNewAgent("DynamicParkingFacility" + i, dynamicParkingFacility).start();
 
 				mainGrid.moveTo(dynamicParkingFacility, location.getX(), location.getY());

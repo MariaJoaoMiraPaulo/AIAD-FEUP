@@ -70,10 +70,26 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	/**
+	 * Changes the price per hour, used to update parameter on parks with dynamic prices
+	 * @param pricePerHour new price per hour
+	 */
+	public void setPricePerHour(double pricePerHour) {
+		this.pricePerHour = pricePerHour;
+	}
+
+	/**
 	 * @return the max price per day
 	 */
 	public double getMaxPricePerDay() {
 		return maxPricePerDay;
+	}
+	
+	/**
+	 * Changes the max price per day, used to update parameter on parks with dynamic prices
+	 * @param maxPricePerDay new max price per day
+	 */
+	public void setMaxPricePerDay(double maxPricePerDay) {
+		this.maxPricePerDay = maxPricePerDay;
 	}
 
 	/**
