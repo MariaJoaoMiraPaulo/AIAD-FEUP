@@ -34,7 +34,7 @@
     </entry>
     <entry>
       <string>parking_lots_simulation.debug.DynamicParkingFacilityAgent</string>
-      <string>parking_lots_simulation.debug.DynamicParkingFacilityAgent.style_1.xml</string>
+      <string>parking_lots_simulation.debug.DynamicParkingFacilityAgent.style_2.xml</string>
     </entry>
   </editedStyles>
   <netStyles/>
@@ -47,7 +47,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>1993963480</hashCode>
+    <hashCode>1250479282</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
   <layoutProjection>Main Grid</layoutProjection>
@@ -91,7 +91,7 @@
             <map>
               <entry>
                 <string>COLOR</string>
-                <int>-16777216</int>
+                <int>-3355444</int>
               </entry>
               <entry>
                 <string>UNIT_SIZE</string>

@@ -11,16 +11,16 @@ public class ParkingFacilityAgent extends Agent {
 	private Map<String, DriverAgent> parkedCars = new HashMap<>();
 	private int capacity;
 	private double price;
+	private double maxPrice;
 	private GridPoint location;
-
-	public GridPoint getLocation() {
-		return location;
-	}
-
-	public ParkingFacilityAgent(GridPoint location, int capacity, double price) {
+	private String name;
+	
+	public ParkingFacilityAgent(String name, GridPoint location, int capacity, double price, double MaxPrice) {
 		this.location = location;
 		this.capacity = capacity;
 		this.price = price;
+		this.name = name;
+		this.maxPrice = MaxPrice;
 	}
 
 	/**
@@ -63,4 +63,26 @@ public class ParkingFacilityAgent extends Agent {
 	public double getPrice() {
 		return price;
 	}
+	
+	/**
+	 * @return the maximum price per day
+	 */
+	public double getMaxPrice() {
+		return maxPrice;
+	}
+	
+	/**
+	 * @return parking name
+	 */
+	public String getParkFacilityName() {
+		return name;
+	}
+	
+	/**
+	 * @return location
+	 */
+	public GridPoint getLocation() {
+		return location;
+	}
+
 }

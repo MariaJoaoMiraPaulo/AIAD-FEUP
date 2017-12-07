@@ -5,8 +5,8 @@ import repast.simphony.space.grid.GridPoint;
 
 public class StaticParkingFacilityAgent extends ParkingFacilityAgent {
 
-	public StaticParkingFacilityAgent(GridPoint location, int capacity, double price) {
-		super(location, capacity, price);
+	public StaticParkingFacilityAgent(String name, GridPoint location, int capacity, double price, double maxPrice) {
+		super(name, location, capacity, price, maxPrice);
 	}
 	
 }
