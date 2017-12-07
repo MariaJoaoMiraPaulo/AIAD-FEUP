@@ -10,17 +10,19 @@ public class ParkingFacilityAgent extends Agent {
 
 	private Map<String, DriverAgent> parkedCars = new HashMap<>();
 	private int capacity;
-	private double price;
-	private double maxPrice;
+	private double pricePerHour;
+	private double maxPricePerDay;
 	private GridPoint location;
+	private double weeklyRevenue;
 	private String name;
-	
-	public ParkingFacilityAgent(String name, GridPoint location, int capacity, double price, double MaxPrice) {
+
+	public ParkingFacilityAgent(String name, GridPoint location, int capacity, double pricePerHour, double maxPricePerDay) {
 		this.location = location;
 		this.capacity = capacity;
-		this.price = price;
+		this.pricePerHour = pricePerHour;
+		this.maxPricePerDay = maxPricePerDay;
+		this.weeklyRevenue = 0;
 		this.name = name;
-		this.maxPrice = MaxPrice;
 	}
 
 	/**
@@ -40,6 +42,7 @@ public class ParkingFacilityAgent extends Agent {
 	public void parkCar(DriverAgent driverAgent) {
 		parkedCars.put(driverAgent.getId(), driverAgent);
 		driverAgent.setCurrentParkingFacility(this);
+		weeklyRevenue += driverAgent.getDurationOfStay() * pricePerHour;
 	}
 
 	/**
@@ -60,15 +63,52 @@ public class ParkingFacilityAgent extends Agent {
 	/**
 	 * @return the price per hour
 	 */
-	public double getPrice() {
-		return price;
+	public double getPricePerHour() {
+		return pricePerHour;
 	}
 	
 	/**
-	 * @return the maximum price per day
+	 * Changes the price per hour, used to update parameter on parks with dynamic prices
+	 * @param pricePerHour new price per hour
+	 * @return if the value as increased true, false otherwise
 	 */
-	public double getMaxPrice() {
-		return maxPrice;
+	public boolean updatePricePerHour(double pricePerHour) {
+		
+		boolean ret = (this.pricePerHour >= pricePerHour) ? true : false;
+		
+		this.pricePerHour = pricePerHour;
+		
+		return ret;
+	}
+
+	/**
+	 * @return the max price per day
+	 */
+	public double getMaxPricePerDay() {
+		return maxPricePerDay;
+	}
+	
+	/**
+	 * Changes the max price per day, used to update parameter on parks with dynamic prices
+	 * @param maxPricePerDay new max price per day
+	 */
+	public void setMaxPricePerDay(double maxPricePerDay) {
+		this.maxPricePerDay = maxPricePerDay;
+	}
+
+	/**
+	 * @return the weekly revenue
+	 */
+	public double getWeeklyRevenue() {
+		return weeklyRevenue;
+	}
+
+	/**
+	 * Used to reset weekly revenue, on the begging of the week
+	 * @param weeklyRevenue new weekly revenue
+	 */
+	public void setWeeklyRevenue(double weeklyRevenue) {
+		this.weeklyRevenue = weeklyRevenue;
 	}
 	
 	/**

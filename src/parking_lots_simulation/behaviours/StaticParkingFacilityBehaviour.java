@@ -1,27 +1,22 @@
 package parking_lots_simulation.behaviours;
 
 import parking_lots_simulation.ParkingFacilityAgent;
-import repast.simphony.space.grid.Grid;
-import sajas.core.behaviours.Behaviour;
+import repast.simphony.engine.schedule.ISchedule;
 
-public class StaticParkingFacilityBehaviour extends Behaviour {
+public class StaticParkingFacilityBehaviour extends ParkRevenueBehaviour {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7768427673852544310L;
+	private static final long serialVersionUID = 4140441100631042778L;
 
-	public StaticParkingFacilityBehaviour(ParkingFacilityAgent parkingFacility, Grid<Object> mainGrid) {
-		super();
+	public StaticParkingFacilityBehaviour(ParkingFacilityAgent parkingFacility, ISchedule currentSchedule) {
+		super(parkingFacility, currentSchedule);
 	}
 
 	@Override
-	public void action() {
-
+	public void updateValues(double currentWeek, double atualRevenue) {
+		return;
 	}
 
-	@Override
-	public boolean done() {
-		return false;
-	}
 }

@@ -15,6 +15,7 @@ import repast.simphony.context.Context;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
@@ -28,12 +29,13 @@ import sajas.wrapper.ContainerController;
 public class Launcher extends RepastSLauncher {
 
 	public static Logger logger = Logger.getGlobal();
-	public int staticParkingFacilityCount = 5;
-	public int dynamicParkingFacilityCount = 5;
-	public int explorerDriverCount = 10;
-	public int guidedDriverCount = 10;
 	public static int driverGenerationSeed;
+	private boolean showDynamicParks = true;
+	private ISchedule currentSchedule;
 	public static final int TICKS_IN_HOUR = 30;
+	public static final int DAYS_PER_WEEK = 7;
+	public static final int HOURS_PER_DAY = 24;
+	public static final int TICKS_IN_WEEK = TICKS_IN_HOUR * DAYS_PER_WEEK * HOURS_PER_DAY;
 	public static final int GRID_WIDTH_SIZE = 120;
 	public static final int GRID_HEIGHT_SIZE = 80;
 	public static final int MAX_PRICE = 5; // per hour
@@ -56,6 +58,7 @@ public class Launcher extends RepastSLauncher {
 	@Override
 	protected void launchJADE() {
 		parseParams();
+		currentSchedule = RunEnvironment.getInstance().getCurrentSchedule();
 
 		Runtime rt = Runtime.instance();
 		Profile p1 = new ProfileImpl();
@@ -73,11 +76,8 @@ public class Launcher extends RepastSLauncher {
 
 	private void parseParams() {
 		Parameters params = RunEnvironment.getInstance().getParameters();
-		explorerDriverCount = params.getInteger("explorerDriverCount");
-		guidedDriverCount = params.getInteger("guidedDriverCount");
-		staticParkingFacilityCount = params.getInteger("staticParkingFacilityCount");
-		dynamicParkingFacilityCount = params.getInteger("dynamicParkingFacilityCount");
 		driverGenerationSeed = params.getInteger("driverGenerationSeed");
+		showDynamicParks = params.getBoolean("showDynamicParks");
 	}
 
 	@Override
@@ -91,10 +91,12 @@ public class Launcher extends RepastSLauncher {
 	}
 
 	public void launchAgents() {
-		// Initialize Dynamic Parking Facilities
-		initializeDynamicParkingFacility();
-		// Initialize Static Parking Facilities
-		// initializeStaticParkingFacility();
+		// Verifying if the user wants dynamic parks or static parks
+		if (showDynamicParks) { // Initialize Dynamic Parking Facilities
+			initializeDynamicParkingFacility();
+		} else { // Initialize Static Parking Facilities
+			initializeStaticParkingFacility();
+		}
 	}
 
 	public void initializeDynamicParkingFacility() {
@@ -187,7 +189,7 @@ public class Launcher extends RepastSLauncher {
 	public void launchStaticParkingFacilities(StaticParkingFacilityAgent staticPark) {
 		try {
 			parkingFacilities.add(staticPark);
-			staticPark.addBehaviour(new StaticParkingFacilityBehaviour(staticPark, mainGrid));
+			staticPark.addBehaviour(new StaticParkingFacilityBehaviour(staticPark, currentSchedule));
 			mainContainer.acceptNewAgent(staticPark.getParkFacilityName(), staticPark).start();
 			mainGrid.moveTo(staticPark, staticPark.getLocation().getX(), staticPark.getLocation().getY());
 		} catch (StaleProxyException e) {
@@ -198,7 +200,7 @@ public class Launcher extends RepastSLauncher {
 	public void launchDynamicParkingFacilities(DynamicParkingFacilityAgent dynamicPark) {
 		try {
 			parkingFacilities.add(dynamicPark);
-			dynamicPark.addBehaviour(new DynamicParkingFacilityBehaviour(dynamicPark, mainGrid));
+			dynamicPark.addBehaviour(new DynamicParkingFacilityBehaviour(dynamicPark, currentSchedule));
 			mainContainer.acceptNewAgent(dynamicPark.getParkFacilityName(), dynamicPark).start();
 			mainGrid.moveTo(dynamicPark, dynamicPark.getLocation().getX(), dynamicPark.getLocation().getY());
 		} catch (StaleProxyException e) {

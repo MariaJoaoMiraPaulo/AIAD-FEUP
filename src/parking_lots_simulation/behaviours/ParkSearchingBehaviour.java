@@ -116,7 +116,7 @@ public abstract class ParkSearchingBehaviour extends Behaviour {
 		double utility = driver.getUtilityForArrivingAtDestination();
 		double distanceToDestination = grid.getDistance(driver.getDestination(), grid.getLocation(parkingFacility));
 
-		double payment = DriverAgent.alpha * parkingFacility.getPrice() * driver.getDurationOfStay();
+		double payment = DriverAgent.alpha * parkingFacility.getPricePerHour() * driver.getDurationOfStay();
 		double effort = DriverAgent.beta * distanceToDestination;
 
 		return utility - driver.getPaymentEmphasis() * Math.pow(payment, u)

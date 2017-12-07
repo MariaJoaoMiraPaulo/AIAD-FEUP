@@ -23,7 +23,7 @@ public class SleepBehaviour extends Behaviour {
 
 	@Override
 	public void action() {
-		if (numberOfTicksRemaining == 0) {
+		if (numberOfTicksRemaining < 0) {
 			if (!driver.isParked()) {
 				System.err.println("Driver must be parked when this behaviour is created");
 			}
