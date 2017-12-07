@@ -21,6 +21,7 @@ import repast.simphony.context.Context;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
@@ -40,7 +41,11 @@ public class Launcher extends RepastSLauncher {
 	public int explorerDriverCount = 10;
 	public int guidedDriverCount = 10;
 	private int driverGenerationSeed;
-	public static final int TICKS_IN_HOUR = 600000;
+	private ISchedule currentSchedule;
+	public static final int TICKS_IN_HOUR = 10000;
+	public static final int NUMBER_OF_DAYS_PER_WEEK = 7;
+	public static final int NUMBER_OF_HOURS_PER_DAY = 24;
+	public static final int TICKS_IN_WEEK = TICKS_IN_HOUR * NUMBER_OF_DAYS_PER_WEEK * NUMBER_OF_HOURS_PER_DAY;
 	public static final int GRID_WIDTH_SIZE = 50;
 	public static final int GRID_HEIGHT_SIZE = 50;
 	public static final int MAX_PRICE = 5; // per hour
@@ -64,6 +69,7 @@ public class Launcher extends RepastSLauncher {
 	protected void launchJADE() {
 		parseParams();
 		driverRandomGenerator = new Random(driverGenerationSeed);
+		currentSchedule = RunEnvironment.getInstance().getCurrentSchedule();
 
 		Runtime rt = Runtime.instance();
 		Profile p1 = new ProfileImpl();
@@ -102,7 +108,14 @@ public class Launcher extends RepastSLauncher {
 			// create static parking facilities
 			for (int i = 0; i < staticParkingFacilityCount; i++) {
 				GridPoint location = generateRandomGridPoint();
-				StaticParkingFacilityAgent staticParkingFacility = new StaticParkingFacilityAgent(location, 1, 5);
+				
+				// TODO change to CSV file
+				Random priceDecimalRandomGenerator = new Random();
+				Random priceIntRandomGenerator = new Random();
+				double price = priceDecimalRandomGenerator.nextFloat() + priceIntRandomGenerator.nextInt(2) + 1;
+				double maxPricePerDay = priceDecimalRandomGenerator.nextFloat() + priceIntRandomGenerator.nextInt(13) + 9;
+				
+				StaticParkingFacilityAgent staticParkingFacility = new StaticParkingFacilityAgent(location, 1, price, maxPricePerDay);
 				parkingFacilities.add(staticParkingFacility);
 				staticParkingFacility.addBehaviour(new StaticParkingFacilityBehaviour(staticParkingFacility, mainGrid));
 				mainContainer.acceptNewAgent("StaticParkingFacility" + i, staticParkingFacility).start();
@@ -113,10 +126,17 @@ public class Launcher extends RepastSLauncher {
 			// create dynamic parking facilities
 			for (int i = 0; i < dynamicParkingFacilityCount; i++) {
 				GridPoint location = generateRandomGridPoint();
-				DynamicParkingFacilityAgent dynamicParkingFacility = new DynamicParkingFacilityAgent(location, 1, 10);
+				
+				// TODO change to CSV file
+				Random priceDecimalRandomGenerator = new Random();
+				Random priceIntRandomGenerator = new Random();
+				double price = priceDecimalRandomGenerator.nextFloat() + priceIntRandomGenerator.nextInt(2) + 1;
+				double maxPricePerDay = priceDecimalRandomGenerator.nextFloat() + priceIntRandomGenerator.nextInt(13) + 9;
+				
+				DynamicParkingFacilityAgent dynamicParkingFacility = new DynamicParkingFacilityAgent(location, 1, price, maxPricePerDay);
 				parkingFacilities.add(dynamicParkingFacility);
 				dynamicParkingFacility
-						.addBehaviour(new DynamicParkingFacilityBehaviour(dynamicParkingFacility, mainGrid));
+						.addBehaviour(new DynamicParkingFacilityBehaviour(dynamicParkingFacility, mainGrid, currentSchedule));
 				mainContainer.acceptNewAgent("DynamicParkingFacility" + i, dynamicParkingFacility).start();
 
 				mainGrid.moveTo(dynamicParkingFacility, location.getX(), location.getY());

@@ -10,17 +10,21 @@ public class ParkingFacilityAgent extends Agent {
 
 	private Map<String, DriverAgent> parkedCars = new HashMap<>();
 	private int capacity;
-	private double price;
+	private double pricePerHour;
+	private double maxPricePerDay;
 	private GridPoint location;
+	private double weeklyRevenue;
 
 	public GridPoint getLocation() {
 		return location;
 	}
 
-	public ParkingFacilityAgent(GridPoint location, int capacity, double price) {
+	public ParkingFacilityAgent(GridPoint location, int capacity, double price, double maxPricePerDay) {
 		this.location = location;
 		this.capacity = capacity;
-		this.price = price;
+		this.pricePerHour = price;
+		this.maxPricePerDay = maxPricePerDay;
+		this.weeklyRevenue = 0;
 	}
 
 	/**
@@ -40,6 +44,7 @@ public class ParkingFacilityAgent extends Agent {
 	public void parkCar(DriverAgent driverAgent) {
 		parkedCars.put(driverAgent.getId(), driverAgent);
 		driverAgent.setCurrentParkingFacility(this);
+		weeklyRevenue += driverAgent.getDurationOfStay() * pricePerHour;
 	}
 
 	/**
@@ -60,7 +65,29 @@ public class ParkingFacilityAgent extends Agent {
 	/**
 	 * @return the price per hour
 	 */
-	public double getPrice() {
-		return price;
+	public double getPricePerHour() {
+		return pricePerHour;
+	}
+	
+	/**
+	 * @return the max price per day
+	 */
+	public double getMaxPricePerDay() {
+		return maxPricePerDay;
+	}
+
+	/**
+	 * @return the weekly revenue
+	 */
+	public double getWeeklyRevenue() {
+		return weeklyRevenue;
+	}
+
+	/**
+	 * Used to reset weekly revenue, on the begging of the week
+	 * @param weeklyRevenue new weekly revenue
+	 */
+	public void setWeeklyRevenue(double weeklyRevenue) {
+		this.weeklyRevenue = weeklyRevenue;
 	}
 }
