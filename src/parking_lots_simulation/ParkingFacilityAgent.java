@@ -14,17 +14,15 @@ public class ParkingFacilityAgent extends Agent {
 	private double maxPricePerDay;
 	private GridPoint location;
 	private double weeklyRevenue;
+	private String name;
 
-	public GridPoint getLocation() {
-		return location;
-	}
-
-	public ParkingFacilityAgent(GridPoint location, int capacity, double price, double maxPricePerDay) {
+	public ParkingFacilityAgent(String name, GridPoint location, int capacity, double pricePerHour, double maxPricePerDay) {
 		this.location = location;
 		this.capacity = capacity;
-		this.pricePerHour = price;
+		this.pricePerHour = pricePerHour;
 		this.maxPricePerDay = maxPricePerDay;
 		this.weeklyRevenue = 0;
+		this.name = name;
 	}
 
 	/**
@@ -112,4 +110,19 @@ public class ParkingFacilityAgent extends Agent {
 	public void setWeeklyRevenue(double weeklyRevenue) {
 		this.weeklyRevenue = weeklyRevenue;
 	}
+	
+	/**
+	 * @return parking name
+	 */
+	public String getParkFacilityName() {
+		return name;
+	}
+	
+	/**
+	 * @return location
+	 */
+	public GridPoint getLocation() {
+		return location;
+	}
+
 }

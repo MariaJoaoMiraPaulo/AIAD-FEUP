@@ -5,11 +5,13 @@ import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import sajas.core.Agent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
 import parking_lots_simulation.behaviours.DynamicParkingFacilityBehaviour;
 import parking_lots_simulation.behaviours.ExplorerDriverBehaviour;
+import parking_lots_simulation.behaviours.GodBehaviour;
 import parking_lots_simulation.behaviours.GuidedDriverBehaviour;
 import parking_lots_simulation.behaviours.SleepBehaviour;
 import parking_lots_simulation.behaviours.StaticParkingFacilityBehaviour;
@@ -41,13 +43,14 @@ public class Launcher extends RepastSLauncher {
 	public int explorerDriverCount = 10;
 	public int guidedDriverCount = 10;
 	private int driverGenerationSeed;
+	private boolean showDynamicParks = true;
 	private ISchedule currentSchedule;
 	public static final int TICKS_IN_HOUR = 10000;
 	public static final int NUMBER_OF_DAYS_PER_WEEK = 7;
 	public static final int NUMBER_OF_HOURS_PER_DAY = 24;
 	public static final int TICKS_IN_WEEK = TICKS_IN_HOUR * NUMBER_OF_DAYS_PER_WEEK * NUMBER_OF_HOURS_PER_DAY;
-	public static final int GRID_WIDTH_SIZE = 50;
-	public static final int GRID_HEIGHT_SIZE = 50;
+	public static final int GRID_WIDTH_SIZE = 120;
+	public static final int GRID_HEIGHT_SIZE = 80;
 	public static final int MAX_PRICE = 5; // per hour
 	public static final int MAX_DURATION_OF_STAY = 8; // TO_DO: ticks?
 	public static final double MAX_PAYMENT = (1 * MAX_PRICE * MAX_DURATION_OF_STAY);
@@ -85,6 +88,7 @@ public class Launcher extends RepastSLauncher {
 		staticParkingFacilityCount = params.getInteger("staticParkingFacilityCount");
 		dynamicParkingFacilityCount = params.getInteger("dynamicParkingFacilityCount");
 		driverGenerationSeed = params.getInteger("driverGenerationSeed");
+		showDynamicParks = params.getBoolean("showDynamicParks");
 	}
 
 	@Override
@@ -105,6 +109,7 @@ public class Launcher extends RepastSLauncher {
 
 		try {
 
+/*
 			// create static parking facilities
 			for (int i = 0; i < staticParkingFacilityCount; i++) {
 				GridPoint location = generateRandomGridPoint();
@@ -140,7 +145,20 @@ public class Launcher extends RepastSLauncher {
 				mainContainer.acceptNewAgent("DynamicParkingFacility" + i, dynamicParkingFacility).start();
 
 				mainGrid.moveTo(dynamicParkingFacility, location.getX(), location.getY());
+			}*/
+			
+			//Initialize Dynamic Parking Facilities
+			//initializeDynamicParkingFacility();
+			
+			if(showDynamicParks) {
+				initializeDynamicParkingFacility();
 			}
+			else {
+				initializeStaticParkingFacility();
+			}
+			
+			//Initialize Static Parking Facilities
+			//initializeStaticParkingFacility();
 
 			// create explorer driver agents
 			for (int i = 0; i < explorerDriverCount; i++) {
@@ -186,9 +204,99 @@ public class Launcher extends RepastSLauncher {
 				GridPoint start = generateRandomGridPoint();
 				mainGrid.moveTo(guidedDriver, start.getX(), start.getY());
 			}
+			
+			Agent god = new Agent();
+			god.addBehaviour(new GodBehaviour());
+			mainContainer.acceptNewAgent("god", god).start();;
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
+	
+	public void initializeDynamicParkingFacility(){
+		
+		DynamicParkingFacilityAgent parking1 = new DynamicParkingFacilityAgent("Cabergerweg",new GridPoint(2,46), 698, 1.43, 20.00);
+		launchDynamicParkingFacilities(parking1);
+		DynamicParkingFacilityAgent parking2 = new DynamicParkingFacilityAgent("Sphinx-terrein",new GridPoint(35,65), 500, 2.22, 13.00);
+		launchDynamicParkingFacilities(parking2);
+		DynamicParkingFacilityAgent parking3 = new DynamicParkingFacilityAgent("De griend",new GridPoint(44,71), 351, 2.22, 13.00);
+		launchDynamicParkingFacilities(parking3);
+		DynamicParkingFacilityAgent parking4 = new DynamicParkingFacilityAgent("Bassin",new GridPoint(47,49), 407, 2.73, 25.00);
+		launchDynamicParkingFacilities(parking4);
+		DynamicParkingFacilityAgent parking5 = new DynamicParkingFacilityAgent("P + R station Maastricht",new GridPoint(58,73), 335, 1.83, 13.00);
+		launchDynamicParkingFacilities(parking5);
+		DynamicParkingFacilityAgent parking6 = new DynamicParkingFacilityAgent("Mosae forum",new GridPoint(51,55), 1082, 2.73, 25.00);
+		launchDynamicParkingFacilities(parking6);
+		DynamicParkingFacilityAgent parking7 = new DynamicParkingFacilityAgent("Vrijthof",new GridPoint(61,38), 1082, 2.73, 25.00);
+		launchDynamicParkingFacilities(parking7);
+		DynamicParkingFacilityAgent parking8 = new DynamicParkingFacilityAgent("P + R meerssenerweg",new GridPoint(73,69), 65, 1.89, 13.00);
+		launchDynamicParkingFacilities(parking8);
+		DynamicParkingFacilityAgent parking9 = new DynamicParkingFacilityAgent("O.L. vrouweparking",new GridPoint(79,62), 350, 2.73, 25.00);
+		launchDynamicParkingFacilities(parking9);
+		DynamicParkingFacilityAgent parking10 = new DynamicParkingFacilityAgent("Plein 1992",new GridPoint(72,34), 449, 2.22, 13.00);
+		launchDynamicParkingFacilities(parking10);
+		DynamicParkingFacilityAgent parking11 = new DynamicParkingFacilityAgent("De colonel",new GridPoint(79,17), 297, 2.22, 13.00);
+		launchDynamicParkingFacilities(parking11);
+		DynamicParkingFacilityAgent parking12 = new DynamicParkingFacilityAgent("Bonnefantenmuseum",new GridPoint(90,51), 303, 1.43, 25.00);
+		launchDynamicParkingFacilities(parking12);
+		DynamicParkingFacilityAgent parking13 = new DynamicParkingFacilityAgent("Brusselse poort",new GridPoint(88,44), 610, 1.43, 25.00);
+		launchDynamicParkingFacilities(parking13);
+		
+	}
+	
+	
+	public void initializeStaticParkingFacility(){
+		
+		StaticParkingFacilityAgent parking1 = new StaticParkingFacilityAgent("Cabergerweg",new GridPoint(2,46), 698, 1.43, 20.00);
+		launchStaticParkingFacilities(parking1);
+		StaticParkingFacilityAgent parking2 = new StaticParkingFacilityAgent("Sphinx-terrein",new GridPoint(35,65), 500, 2.22, 13.00);
+		launchStaticParkingFacilities(parking2);
+		StaticParkingFacilityAgent parking3 = new StaticParkingFacilityAgent("De griend",new GridPoint(44,71), 351, 2.22, 13.00);
+		launchStaticParkingFacilities(parking3);
+		StaticParkingFacilityAgent parking4 = new StaticParkingFacilityAgent("Bassin",new GridPoint(47,49), 407, 2.73, 25.00);
+		launchStaticParkingFacilities(parking4);
+		StaticParkingFacilityAgent parking5 = new StaticParkingFacilityAgent("P + R station Maastricht",new GridPoint(58,73), 335, 1.83, 13.00);
+		launchStaticParkingFacilities(parking5);
+		StaticParkingFacilityAgent parking6 = new StaticParkingFacilityAgent("Mosae forum",new GridPoint(51,55), 1082, 2.73, 25.00);
+		launchStaticParkingFacilities(parking6);
+		StaticParkingFacilityAgent parking7 = new StaticParkingFacilityAgent("Vrijthof",new GridPoint(61,38), 1082, 2.73, 25.00);
+		launchStaticParkingFacilities(parking7);
+		StaticParkingFacilityAgent parking8 = new StaticParkingFacilityAgent("P + R meerssenerweg",new GridPoint(73,69), 65, 1.89, 13.00);
+		launchStaticParkingFacilities(parking8);
+		StaticParkingFacilityAgent parking9 = new StaticParkingFacilityAgent("O.L. vrouweparking",new GridPoint(79,62), 350, 2.73, 25.00);
+		launchStaticParkingFacilities(parking9);
+		StaticParkingFacilityAgent parking10 = new StaticParkingFacilityAgent("Plein 1992",new GridPoint(72,34), 449, 2.22, 13.00);
+		launchStaticParkingFacilities(parking10);
+		StaticParkingFacilityAgent parking11 = new StaticParkingFacilityAgent("De colonel",new GridPoint(79,17), 297, 2.22, 13.00);
+		launchStaticParkingFacilities(parking11);
+		StaticParkingFacilityAgent parking12 = new StaticParkingFacilityAgent("Bonnefantenmuseum",new GridPoint(90,51), 303, 1.43, 25.00);
+		launchStaticParkingFacilities(parking12);
+		StaticParkingFacilityAgent parking13 = new StaticParkingFacilityAgent("Brusselse poort",new GridPoint(88,44), 610, 1.43, 25.00);
+		launchStaticParkingFacilities(parking13);
+	}
+	
+	
+	public void launchStaticParkingFacilities(StaticParkingFacilityAgent staticPark){
+		try {
+			parkingFacilities.add(staticPark);
+			staticPark.addBehaviour(new StaticParkingFacilityBehaviour(staticPark, currentSchedule));
+			mainContainer.acceptNewAgent(staticPark.getParkFacilityName(), staticPark).start();
+			mainGrid.moveTo(staticPark, staticPark.getLocation().getX(), staticPark.getLocation().getY());
+		} catch (StaleProxyException e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	public void launchDynamicParkingFacilities(DynamicParkingFacilityAgent dynamicPark){
+		try {
+			parkingFacilities.add(dynamicPark);
+			dynamicPark.addBehaviour(new DynamicParkingFacilityBehaviour(dynamicPark, currentSchedule));
+			mainContainer.acceptNewAgent(dynamicPark.getParkFacilityName(), dynamicPark).start();
+			mainGrid.moveTo(dynamicPark, dynamicPark.getLocation().getX(), dynamicPark.getLocation().getY());
+		} catch (StaleProxyException e) {
+			e.printStackTrace();
+		}	
+	}
+	
 }

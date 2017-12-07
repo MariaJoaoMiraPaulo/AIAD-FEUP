@@ -11,6 +11,7 @@ local.properties
 .recommenders
 debug.log
 velocity.log
+Repast.settings
 
 # External tool builders
 .externalToolBuilders/

@@ -1,10 +1,9 @@
 <repast.simphony.visualization.editedStyle.DefaultEditedStyleData2D>
   <shapeWkt>square</shapeWkt>
-  <size>15.0</size>
-  <sizeMax>15.0</sizeMax>
+  <size>20.0</size>
+  <sizeMax>20.0</sizeMax>
   <sizeMin>1.0</sizeMin>
   <sizeScale>1.0</sizeScale>
-  <sizeMethodName>getCapacity</sizeMethodName>
   <label></label>
   <labelPosition>bottom</labelPosition>
   <labelPrecision>3</labelPrecision>
@@ -18,7 +17,7 @@
     <float>0.0</float>
   </labelColor>
   <color>
-    <float>0.6</float>
+    <float>0.4</float>
     <float>0.8</float>
     <float>0.0</float>
   </color>
