@@ -68,17 +68,10 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	/**
-	 * Changes the price per hour, used to update parameter on parks with dynamic prices
 	 * @param pricePerHour new price per hour
-	 * @return if the value as increased true, false otherwise
 	 */
-	public boolean updatePricePerHour(double pricePerHour) {
-		
-		boolean ret = (this.pricePerHour >= pricePerHour) ? true : false;
-		
+	public void setPricePerHour(double pricePerHour) {
 		this.pricePerHour = pricePerHour;
-		
-		return ret;
 	}
 
 	/**
@@ -89,7 +82,6 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	/**
-	 * Changes the max price per day, used to update parameter on parks with dynamic prices
 	 * @param maxPricePerDay new max price per day
 	 */
 	public void setMaxPricePerDay(double maxPricePerDay) {
@@ -110,14 +102,14 @@ public class ParkingFacilityAgent extends Agent {
 	public void setWeeklyRevenue(double weeklyRevenue) {
 		this.weeklyRevenue = weeklyRevenue;
 	}
-	
+
 	/**
 	 * @return parking name
 	 */
 	public String getParkFacilityName() {
 		return name;
 	}
-	
+
 	/**
 	 * @return location
 	 */
