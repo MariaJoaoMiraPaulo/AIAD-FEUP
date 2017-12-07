@@ -5,11 +5,13 @@ import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import sajas.core.Agent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.StaleProxyException;
 import parking_lots_simulation.behaviours.DynamicParkingFacilityBehaviour;
 import parking_lots_simulation.behaviours.ExplorerDriverBehaviour;
+import parking_lots_simulation.behaviours.GodBehaviour;
 import parking_lots_simulation.behaviours.GuidedDriverBehaviour;
 import parking_lots_simulation.behaviours.SleepBehaviour;
 import parking_lots_simulation.behaviours.StaticParkingFacilityBehaviour;
@@ -150,6 +152,10 @@ public class Launcher extends RepastSLauncher {
 				GridPoint start = generateRandomGridPoint();
 				mainGrid.moveTo(guidedDriver, start.getX(), start.getY());
 			}
+			
+			Agent god = new Agent();
+			god.addBehaviour(new GodBehaviour());
+			mainContainer.acceptNewAgent("god", god).start();;
 		} catch (StaleProxyException e) {
 			e.printStackTrace();
 		}
@@ -216,7 +222,6 @@ public class Launcher extends RepastSLauncher {
 		launchStaticParkingFacilities(parking12);
 		StaticParkingFacilityAgent parking13 = new StaticParkingFacilityAgent("Brusselse poort",new GridPoint(88,44), 610, 1.43, 25.00);
 		launchStaticParkingFacilities(parking13);
-		
 	}
 	
 	
