@@ -56,14 +56,12 @@ public class DynamicParkingFacilityBehaviour extends ParkRevenueBehaviour {
 			case PRICE_PER_HOUR:
 				System.out.println("Atualizando o preço por hora");
 				oldValue = parkingFacility.getPricePerHour();
-				newValue = newParameterValue(oldValue);
-				parkingFacility.setPricePerHour(newValue);
+				newValue = parkingFacility.setPricePerHour(newParameterValue(oldValue));
 				break;
 			case MAX_PRICE_PER_DAY:
 				System.out.println("Atualizando o max preço por dia");
 				oldValue = parkingFacility.getMaxPricePerDay();
-				newValue = newParameterValue(oldValue);
-				parkingFacility.setMaxPricePerDay(newValue);
+				newValue = parkingFacility.setMaxPricePerDay(newParameterValue(oldValue));
 				break;
 			default: 
 				break;

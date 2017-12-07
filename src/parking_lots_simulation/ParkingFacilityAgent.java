@@ -11,7 +11,9 @@ public class ParkingFacilityAgent extends Agent {
 	private Map<String, DriverAgent> parkedCars = new HashMap<>();
 	private int capacity;
 	private double pricePerHour;
+	private double minPricePerHour;
 	private double maxPricePerDay;
+	private double minMaxPricePerDay;
 	private GridPoint location;
 	private double weeklyRevenue;
 	private String name;
@@ -20,7 +22,9 @@ public class ParkingFacilityAgent extends Agent {
 		this.location = location;
 		this.capacity = capacity;
 		this.pricePerHour = pricePerHour;
+		this.minPricePerHour = this.pricePerHour/2;
 		this.maxPricePerDay = maxPricePerDay;
+		this.minMaxPricePerDay = this.maxPricePerDay/2;
 		this.weeklyRevenue = 0;
 		this.name = name;
 	}
@@ -68,10 +72,13 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	/**
-	 * @param pricePerHour new price per hour
+	 * Changes price per hour if isn't below minPricePerHour
+	 * @param pricePerHour
+	 * @return new value
 	 */
-	public void setPricePerHour(double pricePerHour) {
-		this.pricePerHour = pricePerHour;
+	public double setPricePerHour(double pricePerHour) {
+		this.pricePerHour = (pricePerHour > minPricePerHour) ? pricePerHour : minPricePerHour; 
+		return this.pricePerHour;
 	}
 
 	/**
@@ -82,10 +89,13 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	/**
-	 * @param maxPricePerDay new max price per day
+	 * Changes max price per day if isn't below minMaxPricePerDay
+	 * @param maxPricePerDay
+	 * @return new value
 	 */
-	public void setMaxPricePerDay(double maxPricePerDay) {
-		this.maxPricePerDay = maxPricePerDay;
+	public double setMaxPricePerDay(double maxPricePerDay) {
+		this.maxPricePerDay = (maxPricePerDay > minMaxPricePerDay) ? maxPricePerDay : minMaxPricePerDay;
+		return this.maxPricePerDay;
 	}
 
 	/**
