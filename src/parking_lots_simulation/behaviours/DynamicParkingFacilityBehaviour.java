@@ -25,28 +25,26 @@ public class DynamicParkingFacilityBehaviour extends ParkRevenueBehaviour {
 	}
 
 	@Override
-	public void updateValues(double currentWeek, double atualRevenue) {
+	public void updateValues(double currentWeek, double currentRevenue) {
 		
 		if(currentWeek == FIRST_WEEK) {
-			lastWeekRevenue = atualRevenue;
+			lastWeekRevenue = currentRevenue;
 		}
-		if(atualRevenue == 0) {
+		if(currentRevenue == 0) {
 			gamma = 0;
 		}
-		else gamma = atualRevenue / lastWeekRevenue;
+		else gamma = currentRevenue / lastWeekRevenue;
 		
-		parkingFacility.setPricePerHour(updateParameter(parkingFacility.getPricePerHour()));
+		System.out.println("Old price: " + parkingFacility.getPricePerHour());
+		updateWasPositive = parkingFacility.updatePricePerHour(updateParameter(parkingFacility.getPricePerHour()));
+		System.out.println("New price: " + parkingFacility.getPricePerHour());
 		
-		lastWeekRevenue = atualRevenue;
+		lastWeekRevenue = currentRevenue;
 	}
 	
-	public double updateParameter(double atualParameter) {
-
-		if(updateWasPositive) {
-			return atualParameter + DELTA * atualParameter * (gamma - 1);
-		}
-
-		return atualParameter - DELTA * atualParameter * (gamma - 1);
+	public double updateParameter(double currentParameter) {
+		return (updateWasPositive) ? currentParameter + DELTA * currentParameter * (gamma - 1) :
+			currentParameter - DELTA * currentParameter * (gamma - 1);
 	}
 
 }

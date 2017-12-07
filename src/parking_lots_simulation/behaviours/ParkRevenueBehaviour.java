@@ -39,5 +39,5 @@ public abstract class ParkRevenueBehaviour extends Behaviour {
 		return false;
 	}
 	
-	public abstract void  updateValues(double currentWeek, double atualRevenue);
+	public abstract void  updateValues(double currentWeek, double currentRevenue);
 }

@@ -72,9 +72,15 @@ public class ParkingFacilityAgent extends Agent {
 	/**
 	 * Changes the price per hour, used to update parameter on parks with dynamic prices
 	 * @param pricePerHour new price per hour
+	 * @return if the value as increased true, false otherwise
 	 */
-	public void setPricePerHour(double pricePerHour) {
+	public boolean updatePricePerHour(double pricePerHour) {
+		
+		boolean ret = (this.pricePerHour >= pricePerHour) ? true : false;
+		
 		this.pricePerHour = pricePerHour;
+		
+		return ret;
 	}
 
 	/**
