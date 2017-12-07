@@ -1,5 +1,6 @@
 package parking_lots_simulation;
 
+import parking_lots_simulation.behaviours.GodBehaviour;
 import repast.simphony.space.grid.GridPoint;
 import sajas.core.Agent;
 import sajas.core.behaviours.Behaviour;
@@ -11,10 +12,10 @@ public class DriverAgent extends Agent {
 	private GridPoint destination;
 	private String id;
 	private double durationOfStay;
-	
+
 	/*
-	 * The parking facility the driver is currently parked in.
-	 * Null if the agent is not parked.
+	 * The parking facility the driver is currently parked in. Null if the agent is
+	 * not parked.
 	 */
 	private ParkingFacilityAgent currentParkingFacility;
 
@@ -38,9 +39,9 @@ public class DriverAgent extends Agent {
 		this.durationOfStay = durationOfStay;
 		this.destination = destination;
 
-		paymentEmphasis = 1 + Launcher.driverRandomGenerator.nextDouble() * (1.5 - 1);
-		walkDistanceEmphasis = 1 + Launcher.driverRandomGenerator.nextDouble() * (1.5 - 1);
-		utilityForArrivingAtDestination = Launcher.driverRandomGenerator.nextDouble() * 10000;
+		paymentEmphasis = 1 + GodBehaviour.driverRandomGenerator.nextDouble() * (1.5 - 1);
+		walkDistanceEmphasis = 1 + GodBehaviour.driverRandomGenerator.nextDouble() * (1.5 - 1);
+		utilityForArrivingAtDestination = GodBehaviour.driverRandomGenerator.nextDouble() * 10000;
 	}
 
 	public DriverAgent(String id) {

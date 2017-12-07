@@ -29,6 +29,7 @@ public class SleepBehaviour extends Behaviour {
 			}
 			driver.getCurrentParkingFacility().removeCar(driver);
 			Launcher.logger.log(Level.INFO, "Driver parking time exceeded. Exiting system...");
+			Launcher.god.deleteDriver(driver);
 			driver.doDelete();
 		} else {
 			numberOfTicksRemaining--;

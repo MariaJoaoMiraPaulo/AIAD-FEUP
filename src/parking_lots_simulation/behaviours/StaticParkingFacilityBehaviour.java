@@ -10,13 +10,9 @@ public class StaticParkingFacilityBehaviour extends Behaviour {
 	 * 
 	 */
 	private static final long serialVersionUID = 7768427673852544310L;
-	private Grid<Object> mainGrid;
-	private ParkingFacilityAgent parkingFacility;
 
 	public StaticParkingFacilityBehaviour(ParkingFacilityAgent parkingFacility, Grid<Object> mainGrid) {
 		super();
-		this.parkingFacility = parkingFacility;
-		this.mainGrid = mainGrid;
 	}
 
 	@Override
