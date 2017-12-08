@@ -6,7 +6,7 @@ import repast.simphony.engine.schedule.ISchedule;
 public class DynamicParkingFacilityBehaviour extends ParkRevenueBehaviour {
 
 	public enum Parameter {
-		PRICE_PER_HOUR, MAX_PRICE_PER_DAY
+		PRICE_PER_HOUR, MAX_PRICE_PER_DAY, INFLATION_RATE
 	}
 
 	/**
@@ -16,7 +16,7 @@ public class DynamicParkingFacilityBehaviour extends ParkRevenueBehaviour {
 	private static final double DELTA = 0.3;
 	private static final int FIRST_WEEK = 1;
 	private static final int NUMBER_OF_CONSECUTIVE_UPDATES = 5;
-	private static final Parameter[] ARRAY_OF_PARAMETERS = {Parameter.PRICE_PER_HOUR, Parameter.MAX_PRICE_PER_DAY};
+	private static final Parameter[] ARRAY_OF_PARAMETERS = {Parameter.PRICE_PER_HOUR, Parameter.MAX_PRICE_PER_DAY, Parameter.INFLATION_RATE};
 	private boolean updateWasPositive;
 	private double lastWeekRevenue;
 	private double gamma;
@@ -62,6 +62,11 @@ public class DynamicParkingFacilityBehaviour extends ParkRevenueBehaviour {
 				System.out.println("Atualizando o max preço por dia");
 				oldValue = parkingFacility.getMaxPricePerDay();
 				newValue = parkingFacility.setMaxPricePerDay(newParameterValue(oldValue));
+				break;
+			case INFLATION_RATE:
+				System.out.println("Atualizando a inflation rate");
+				oldValue = parkingFacility.getInflationParameter();
+				newValue = parkingFacility.setInflationParameter(newParameterValue(oldValue));
 				break;
 			default: 
 				break;

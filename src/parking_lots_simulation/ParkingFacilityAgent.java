@@ -7,6 +7,8 @@ import repast.simphony.space.grid.GridPoint;
 import sajas.core.Agent;
 
 public class ParkingFacilityAgent extends Agent {
+	
+	private static final double MIN_INFLATION_RATE = 0.25;
 
 	private Map<String, DriverAgent> parkedCars = new HashMap<>();
 	private int capacity;
@@ -53,7 +55,13 @@ public class ParkingFacilityAgent extends Agent {
 	}
 	
 	/**
-	 * Gets the price to pay in function of inflation
+	 * Gets the price to pay in function of inflation. For example for a inflation rate of 1.10 and a price
+	 * per hour of 1, you get the following prices:
+	 * Hour | Price Per Hour  | Total
+	 *   1  |       1		  |   1
+	 *   2	|		1.1		  |   2.1
+	 *   3	|		1.21      |   3.31
+	 *   4	|		1.331     |   4.641
 	 * @param durationOfStay
 	 * @param currentPricePerHour
 	 * @return total to pay
@@ -139,6 +147,23 @@ public class ParkingFacilityAgent extends Agent {
 	 */
 	public GridPoint getLocation() {
 		return location;
+	}
+
+	/**
+	 * @return inflation rate
+	 */
+	public double getInflationParameter() {
+		return inflationParameter;
+	}
+
+	/**
+	 * Changes inflation rate if isn't below min inflation rate
+	 * @param inflationParameter
+	 * @return new inflation rate
+	 */
+	public double setInflationParameter(double inflationParameter) {
+		this.inflationParameter = (inflationParameter > MIN_INFLATION_RATE) ? inflationParameter : MIN_INFLATION_RATE;
+		return this.inflationParameter;
 	}
 
 }
