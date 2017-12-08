@@ -14,7 +14,7 @@ public class SleepBehaviour extends Behaviour {
 	private static final long serialVersionUID = -3142786094110924472L;
 
 	private DriverAgent driver;
-	private int numberOfTicksRemaining;
+	private long numberOfTicksRemaining;
 
 	public SleepBehaviour(DriverAgent driver, int ticksToSleep) {
 		this.driver = driver;
@@ -30,7 +30,6 @@ public class SleepBehaviour extends Behaviour {
 			driver.getCurrentParkingFacility().removeCar(driver);
 			Launcher.logger.log(Level.INFO, "Driver parking time exceeded. Exiting system...");
 			Launcher.god.deleteDriver(driver);
-			driver.doDelete();
 		} else {
 			numberOfTicksRemaining--;
 		}
