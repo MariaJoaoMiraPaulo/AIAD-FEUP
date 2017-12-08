@@ -21,8 +21,15 @@ public class GodBehaviour extends Behaviour {
 	private static final long serialVersionUID = 5217224817467263075L;
 
 	public static final Random driverRandomGenerator = new Random(Launcher.driverGenerationSeed);
+
 	private static final double[] weekday = { 75, 75, 75, 80, 150, 215, 280, 275, 215, 200, 175, 180, 180, 170, 160,
 			150, 145, 140, 125, 70, 50, 50, 75, 50, 25 };
+
+	private static final double[] weekend = { 45, 50, 40, 40, 40, 45, 70, 160, 250, 215, 175, 150, 150, 150, 145, 110,
+			105, 105, 100, 75, 50, 30, 25, 15, 10 };
+
+	private static final double[][] week = { weekday, weekday, weekday, weekday, weekday, weekend, weekend };
+
 	private int currentDrivers = 0;
 
 	private ContainerController mainContainer;
@@ -53,7 +60,7 @@ public class GodBehaviour extends Behaviour {
 	 *            0 is monday, 1 is tuesday ... 6 is sunday
 	 */
 	private void generateAgents(int dayOfTheWeek, int hour, int minute) {
-		for (int i = 0; i < (weekday[hour] - currentDrivers) / 2; i++) {
+		for (int i = 0; i < (week[dayOfTheWeek][hour] - currentDrivers) / 2; i++) {
 			String id = "ExplorerDriver" + currentDriverId;
 
 			// Randomized from 7.5 to 8.5 hours. TODO: Change this according to day of week
@@ -81,7 +88,7 @@ public class GodBehaviour extends Behaviour {
 		}
 
 		// create guided driver agents
-		for (int i = 0; i < weekday[hour] - currentDrivers; i++) {
+		for (int i = 0; i < week[dayOfTheWeek][hour] - currentDrivers; i++) {
 			String id = "GuidedDriver" + currentDriverId;
 
 			// Randomized from 7.5 to 8.5 hours. TODO: Change this according to day of week
