@@ -3,7 +3,6 @@ package parking_lots_simulation;
 import java.util.HashMap;
 import java.util.Map;
 
-import gov.nasa.worldwind.symbology.milstd2525.graphics.lines.InfiltrationLane;
 import repast.simphony.space.grid.GridPoint;
 import sajas.core.Agent;
 
