@@ -10,6 +10,10 @@ public class Statistics {
 	private int guidedDrivers = 0;
 	double[] MorningOccupation = new double[13];
 	double[] MorningPrices = new double[13];
+	double[] AfternoonOccupation = new double[13];
+	double[] AfternoonPrices = new double[13];
+	double[] NightOccupation = new double[13];
+	double[] NightPrices = new double[13];
 
 	public Statistics() {
 		
@@ -20,15 +24,28 @@ public class Statistics {
 		System.out.println("Day of the week: " + getDay(currentTick));
 		System.out.println("Number of Explorer Drives: " + explorerDrivers);
 		System.out.println("Number of Guided Drives: " + guidedDrivers);
-		System.out.println("Occupation Percentage");
+		System.out.println("Morning Occupation Percentage");
 		
 		for(int i= 0; i< MorningOccupation.length; i++) {
 			System.out.println("Park " + i + " at 9:00 " + String.format("%.2f", MorningOccupation[i]) + "%" + " Price per hour : " + MorningPrices[i]);
 		}
+		System.out.println("Afternoon Occupation Percentage");
+		for(int i= 0; i< AfternoonOccupation.length; i++) {
+			System.out.println("Park " + i + " at 16:00 " + String.format("%.2f", AfternoonOccupation[i]) + "%" + " Price per hour : " + AfternoonPrices[i]);
+		}
+		System.out.println("Night Occupation Percentage");
+		for(int i= 0; i< NightOccupation.length; i++) {
+			System.out.println("Park " + i + " at 10:00 " + String.format("%.2f", NightOccupation[i]) + "%" + " Price per hour : " + NightPrices[i]);
+		}
 			
 		
 		System.out.println("-------------------------------");
-		RunEnvironment.getInstance().pauseRun();
+		
+		guidedDrivers = 0;
+		explorerDrivers = 0;
+		
+		//Pauses Simulation 
+		//RunEnvironment.getInstance().pauseRun();
 	}
 	
 	public void addStatisticToGodAgent(GodAgent god) {
@@ -51,9 +68,19 @@ public class Statistics {
 		return weekDays[weekDay-1];
 	}
 	
-	public void updateMorningOccupation(int park, double occupation, double price) {
+	public void updateMorningData(int park, double occupation, double price) {
 		MorningOccupation[park] = occupation * 100;
 		MorningPrices[park] = price;
+	}
+	
+	public void updateAfternoonData(int park, double occupation, double price) {
+		AfternoonOccupation[park] = occupation * 100;
+		AfternoonPrices[park] = price;
+	}
+	
+	public void updateNightData(int park, double occupation, double price) {
+		NightOccupation[park] = occupation * 100;
+		NightPrices[park] = price;
 	}
 	
 }

@@ -58,7 +58,7 @@ public class GodBehaviour extends Behaviour {
 
 		generateAgents(getDayOfTheWeek(tickCount), getHour(tickCount));
 		
-		if(getHour(tickCount)==9.0)
+		if(getHour(tickCount)==9.0 || getHour(tickCount)==16.00)
 			updateStatisticsOccupacity(getHour(tickCount));
 		 
 	}
@@ -151,10 +151,17 @@ public class GodBehaviour extends Behaviour {
 	}
 	
 	public void updateStatisticsOccupacity(double hour) {
-
 		int parkIndex = 0;
+		
 		for(ParkingFacilityAgent park : parkingFacilities){
-			god.getStatistics().updateMorningOccupation(parkIndex, park.getOccupancyPercentage(), park.getPricePerHour()); 
+			
+			if(hour == 9.00)
+				god.getStatistics().updateMorningData(parkIndex, park.getOccupancyPercentage(), park.getPricePerHour()); 
+			if(hour == 16.00)
+				god.getStatistics().updateAfternoonData(parkIndex, park.getOccupancyPercentage(), park.getPricePerHour()); 
+			if(hour == 20.00)
+				god.getStatistics().updateNightData(parkIndex, park.getOccupancyPercentage(), park.getPricePerHour()); 
+				
 			parkIndex ++;
 		}
 	}
