@@ -37,7 +37,7 @@ public class Launcher extends RepastSLauncher  {
 	private boolean showDynamicParks = true;
 	private ISchedule currentSchedule;
 	private Statistics statistics;
-	public static final int TICKS_IN_HOUR = 10;
+	public static final int TICKS_IN_HOUR = 30;
 	public static final int DAYS_PER_WEEK = 7;
 	public static final int HOURS_PER_DAY = 24;
 	public static final int TICKS_IN_WEEK = TICKS_IN_HOUR * DAYS_PER_WEEK * HOURS_PER_DAY;

@@ -15,7 +15,6 @@ public class Statistics {
 	double[] NightOccupation = new double[13];
 	double[] NightPrices = new double[13];
 	double TotalUtility = 0;
-	int totalDrivers = 0;
 
 	public Statistics() {
 		
@@ -40,13 +39,12 @@ public class Statistics {
 			System.out.println("Park " + i + " at 10:00 " + String.format("%.2f", NightOccupation[i]) + "%" + " Price per hour : " + NightPrices[i]);
 		}
 			
-		System.out.println("Drivers Average Utility: " + TotalUtility/totalDrivers);
+		System.out.println("Drivers Average Utility: " + TotalUtility/(guidedDrivers+explorerDrivers));
 		
 		System.out.println("-------------------------------");
 		
 		guidedDrivers = 0;
 		explorerDrivers = 0;
-		totalDrivers = 0;
 		TotalUtility = 0;
 		
 		//Pauses Simulation 
@@ -91,8 +89,5 @@ public class Statistics {
 	public void sumUtility(double utility) {
 		TotalUtility+=utility;
 	}
-	
-	public void incrementDrivers() {
-		totalDrivers++;
-	}
+
 }

@@ -148,7 +148,6 @@ public class GodBehaviour extends Behaviour {
 	public void deleteDriver(DriverAgent driver) {
 		driver.doDelete();
 		currentDrivers--;
-		god.getStatistics().incrementDrivers();
 		god.getStatistics().sumUtility(driver.getUtilityForArrivingAtDestination());
 	}
 	
