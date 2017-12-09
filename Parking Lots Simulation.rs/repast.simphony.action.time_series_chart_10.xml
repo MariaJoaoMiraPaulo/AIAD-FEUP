@@ -3,7 +3,7 @@
   <dataSet>Park Revenue</dataSet>
   <xAxisLabel>Tick Count</xAxisLabel>
   <yAxisLabel></yAxisLabel>
-  <chartTitle></chartTitle>
+  <chartTitle>Park Revenue</chartTitle>
   <type>TIME_SERIES</type>
   <background>
     <red>192</red>

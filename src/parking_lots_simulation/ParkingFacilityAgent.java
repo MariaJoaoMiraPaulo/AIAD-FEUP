@@ -143,11 +143,11 @@ public abstract class ParkingFacilityAgent extends Agent {
 	}
 
 	/**
-	 * Used to reset weekly revenue, on the begging of the week
+	 * Used to reset weekly revenue, on the beginning of the week
 	 * @param weeklyRevenue new weekly revenue
 	 */
-	public void setWeeklyRevenue(double weeklyRevenue) {
-		this.weeklyRevenue = weeklyRevenue;
+	public void resetWeeklyRevenue() {
+		this.weeklyRevenue = 0;
 	}
 
 	/**

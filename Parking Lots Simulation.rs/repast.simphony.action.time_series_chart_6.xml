@@ -3,7 +3,7 @@
   <dataSet>Prices</dataSet>
   <xAxisLabel>Tick Count</xAxisLabel>
   <yAxisLabel></yAxisLabel>
-  <chartTitle></chartTitle>
+  <chartTitle>Price per Hour</chartTitle>
   <type>TIME_SERIES</type>
   <background>
     <red>192</red>

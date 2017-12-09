@@ -3,7 +3,6 @@ package parking_lots_simulation;
 import parking_lots_simulation.behaviours.GodBehaviour;
 import repast.simphony.space.grid.GridPoint;
 import sajas.core.Agent;
-import sajas.core.behaviours.Behaviour;
 
 public class DriverAgent extends Agent {
 	public static final double alpha = 1;
@@ -34,6 +33,8 @@ public class DriverAgent extends Agent {
 	 */
 	private double utilityForArrivingAtDestination;
 
+	private double currentUtility = -10000;
+
 	public DriverAgent(String id, GridPoint destination, double durationOfStay) {
 		this.id = id;
 		this.durationOfStay = durationOfStay;
@@ -41,21 +42,17 @@ public class DriverAgent extends Agent {
 
 		paymentEmphasis = 1 + GodBehaviour.driverRandomGenerator.nextDouble() * (1.5 - 1);
 		walkDistanceEmphasis = 1 + GodBehaviour.driverRandomGenerator.nextDouble() * (1.5 - 1);
-		utilityForArrivingAtDestination = GodBehaviour.driverRandomGenerator.nextDouble() * 10000;
+		utilityForArrivingAtDestination = 5000 + GodBehaviour.driverRandomGenerator.nextDouble() * (10000 - 5000);
+	}
+
+	@Override
+	public void doDelete() {
+		Launcher.god.deleteDriver(this, currentUtility);
+		super.doDelete();
 	}
 
 	public DriverAgent(String id) {
 		this.id = id;
-	}
-
-	@Override
-	public void addBehaviour(Behaviour b) {
-		super.addBehaviour(b);
-	}
-
-	@Override
-	protected void setup() {
-		super.setup();
 	}
 
 	public String getId() {
@@ -78,15 +75,6 @@ public class DriverAgent extends Agent {
 		return walkDistanceEmphasis;
 	}
 
-	@Override
-	protected void takeDown() {
-		super.takeDown();
-	}
-
-	public double getUtilityForArrivingAtDestination() {
-		return utilityForArrivingAtDestination;
-	}
-
 	public ParkingFacilityAgent getCurrentParkingFacility() {
 		return currentParkingFacility;
 	}
@@ -97,5 +85,18 @@ public class DriverAgent extends Agent {
 
 	public boolean isParked() {
 		return currentParkingFacility != null;
+	}
+
+	/**
+	 * Must only be used when the car is already parked.
+	 * 
+	 * @param destinationUtility
+	 */
+	public void setUtility(double destinationUtility) {
+		currentUtility = destinationUtility;
+	}
+
+	public double getUtilityForArrivingAtDestination() {
+		return utilityForArrivingAtDestination;
 	}
 }

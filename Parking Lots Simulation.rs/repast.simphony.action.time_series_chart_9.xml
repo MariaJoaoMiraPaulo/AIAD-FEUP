@@ -3,7 +3,7 @@
   <dataSet>Available space</dataSet>
   <xAxisLabel>Tick Count</xAxisLabel>
   <yAxisLabel></yAxisLabel>
-  <chartTitle></chartTitle>
+  <chartTitle>Available Space</chartTitle>
   <type>TIME_SERIES</type>
   <background>
     <red>192</red>

@@ -7,10 +7,6 @@ import parking_lots_simulation.Launcher;
 import sajas.core.behaviours.Behaviour;
 
 public class SleepBehaviour extends Behaviour {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3142786094110924472L;
 
 	private DriverAgent driver;
@@ -25,11 +21,10 @@ public class SleepBehaviour extends Behaviour {
 	public void action() {
 		if (numberOfTicksRemaining < 0) {
 			if (!driver.isParked()) {
-				System.err.println("Driver must be parked when this behaviour is created");
+				Launcher.logger.log(Level.SEVERE, "Driver must be parked when this behaviour is created");
 			}
 			driver.getCurrentParkingFacility().removeCar(driver);
-			//Launcher.logger.log(Level.INFO, "Driver parking time exceeded. Exiting system...");
-			Launcher.god.deleteDriver(driver);
+			driver.doDelete();
 		} else {
 			numberOfTicksRemaining--;
 		}

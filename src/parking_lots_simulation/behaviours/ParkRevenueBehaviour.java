@@ -22,22 +22,22 @@ public abstract class ParkRevenueBehaviour extends Behaviour {
 
 	@Override
 	public void action() {
-		double totalTicks = currentSchedule.getTickCount();
-		
-		if(totalTicks % Launcher.TICKS_IN_WEEK != 0.0) {
+		int totalTicks = (int) currentSchedule.getTickCount();
+
+		// Only update at the start of the week
+		if (totalTicks % Launcher.TICKS_IN_WEEK != 0) {
 			return;
 		}
-		
-		updateValues(totalTicks/Launcher.TICKS_IN_WEEK, parkingFacility.getWeeklyRevenue());
-		
-		parkingFacility.setWeeklyRevenue(0);
-		
+
+		updateValues(totalTicks / Launcher.TICKS_IN_WEEK, parkingFacility.getWeeklyRevenue());
+
+		parkingFacility.resetWeeklyRevenue();
 	}
 
 	@Override
 	public boolean done() {
 		return false;
 	}
-	
-	public abstract void  updateValues(double currentWeek, double currentRevenue);
+
+	public abstract void updateValues(int currentWeek, double currentRevenue);
 }

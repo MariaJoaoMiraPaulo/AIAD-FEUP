@@ -15,7 +15,7 @@ public class StaticParkingFacilityBehaviour extends ParkRevenueBehaviour {
 	}
 
 	@Override
-	public void updateValues(double currentWeek, double atualRevenue) {
+	public void updateValues(int currentWeek, double currentRevenue) {
 		return;
 	}
 

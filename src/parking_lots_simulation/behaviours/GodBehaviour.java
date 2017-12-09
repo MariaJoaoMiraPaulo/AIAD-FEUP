@@ -1,13 +1,8 @@
 package parking_lots_simulation.behaviours;
 
-import sajas.core.behaviours.Behaviour;
-import sajas.core.behaviours.SequentialBehaviour;
-import sajas.wrapper.ContainerController;
-
 import java.util.Random;
 import java.util.Set;
 
-import it.geosolutions.jaiext.stats.Statistics;
 import jade.wrapper.StaleProxyException;
 import parking_lots_simulation.DriverAgent;
 import parking_lots_simulation.GodAgent;
@@ -21,6 +16,9 @@ import parking_lots_simulation.population.WeekendPopulationCalculator;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
+import sajas.core.behaviours.Behaviour;
+import sajas.core.behaviours.SequentialBehaviour;
+import sajas.wrapper.ContainerController;
 
 public class GodBehaviour extends Behaviour {
 	private static final long serialVersionUID = 5217224817467263075L;
@@ -41,7 +39,7 @@ public class GodBehaviour extends Behaviour {
 	private Set<ParkingFacilityAgent> parkingFacilities;
 
 	private static int currentDriverId = 0;
-	
+
 	private GodAgent god;
 
 	public GodBehaviour(GodAgent god, ContainerController mainContainer, Grid<Object> mainGrid,
@@ -57,13 +55,13 @@ public class GodBehaviour extends Behaviour {
 		int tickCount = (int) RunEnvironment.getInstance().getCurrentSchedule().getTickCount();
 
 		generateAgents(getDayOfTheWeek(tickCount), getHour(tickCount));
-		
-		if(getHour(tickCount)==9.0 || getHour(tickCount)==16.00 || getHour(tickCount)==20.00)
-			updateOccupacityStatistics(getHour(tickCount));
-		
-		if(getDayOfTheWeek(tickCount) == 0)
+
+		if (getHour(tickCount) == 9.0 || getHour(tickCount) == 16.00 || getHour(tickCount) == 20.00)
+			updateOccupancyStatistics(getHour(tickCount));
+
+		if (getDayOfTheWeek(tickCount) == 0)
 			updatePriceStatistics();
-		 
+
 	}
 
 	/**
@@ -104,7 +102,7 @@ public class GodBehaviour extends Behaviour {
 		for (int i = 0; i < week[dayOfTheWeek].calculate(hour) - currentDrivers; i++) {
 			String id = "GuidedDriver" + currentDriverId;
 
-			// Randomized from 7.5 to 8.5 hours. TODO: Change this according to day of week
+			// Randomized from 7.5 to 8.5 hours.
 			double durationOfStay = 7.5 + driverRandomGenerator.nextInt(2);
 
 			GridPoint destination = generateRandomGridPoint();
@@ -148,34 +146,33 @@ public class GodBehaviour extends Behaviour {
 				driverRandomGenerator.nextInt(Launcher.GRID_HEIGHT_SIZE));
 	}
 
-	public void deleteDriver(DriverAgent driver) {
-		driver.doDelete();
+	public void onDriverDelete(DriverAgent driver, double utility) {
 		currentDrivers--;
-		god.getStatistics().sumUtility(driver.getUtilityForArrivingAtDestination());
+		god.getStatistics().sumUtility(utility);
 	}
-	
-	public void updateOccupacityStatistics(double hour) {
+
+	public void updateOccupancyStatistics(double hour) {
 		int parkIndex = 0;
-		
-		for(ParkingFacilityAgent park : parkingFacilities){
-			
-			if(hour == 9.00)
-				god.getStatistics().updateMorningData(parkIndex, park.getOccupancyPercentage()); 
-			if(hour == 16.00)
-				god.getStatistics().updateAfternoonData(parkIndex, park.getOccupancyPercentage()); 
-			if(hour == 20.00)
-				god.getStatistics().updateNightData(parkIndex, park.getOccupancyPercentage()); 
-				
-			parkIndex ++;
+
+		for (ParkingFacilityAgent park : parkingFacilities) {
+
+			if (hour == 9.00)
+				god.getStatistics().updateMorningData(parkIndex, park.getOccupancyPercentage());
+			if (hour == 16.00)
+				god.getStatistics().updateAfternoonData(parkIndex, park.getOccupancyPercentage());
+			if (hour == 20.00)
+				god.getStatistics().updateNightData(parkIndex, park.getOccupancyPercentage());
+
+			parkIndex++;
 		}
 	}
-	
+
 	public void updatePriceStatistics() {
 		int parkIndex = 0;
-		for(ParkingFacilityAgent park : parkingFacilities){
+		for (ParkingFacilityAgent park : parkingFacilities) {
 			god.getStatistics().updateinflationParameter(parkIndex, park.getInflationParameter());
 			god.getStatistics().updatePricePerHour(parkIndex, park.getPricePerHour());
-			parkIndex ++;
+			parkIndex++;
 		}
 	}
 }

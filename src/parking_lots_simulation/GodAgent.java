@@ -23,15 +23,16 @@ public class GodAgent extends Agent {
 		addBehaviour(godBehaviour);
 	}
 
-	public void deleteDriver(DriverAgent driver) {
-		godBehaviour.deleteDriver(driver);
+	public void deleteDriver(DriverAgent driver, double utility) {
+		godBehaviour.onDriverDelete(driver, utility);
 	}
-	
+
 	public void addStatistics(Statistics statistics) {
 		this.statistics = statistics;
 	}
-	
+
 	public Statistics getStatistics() {
 		return statistics;
 	}
+
 }

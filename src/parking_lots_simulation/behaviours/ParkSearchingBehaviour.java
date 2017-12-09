@@ -3,10 +3,8 @@ package parking_lots_simulation.behaviours;
 import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.logging.Level;
 
 import parking_lots_simulation.DriverAgent;
-import parking_lots_simulation.Launcher;
 import parking_lots_simulation.ParkingFacilityAgent;
 import parking_lots_simulation.exceptions.NoValidDestinationException;
 import repast.simphony.space.grid.Grid;
@@ -27,6 +25,8 @@ public abstract class ParkSearchingBehaviour extends Behaviour {
 	protected Set<ParkingFacilityAgent> parkingFacilities;
 	private boolean done = false;
 
+	private double destinationUtility;
+
 	public ParkSearchingBehaviour(DriverAgent driver, Grid<Object> grid, Set<ParkingFacilityAgent> parkingFacilities) {
 		super();
 		this.driver = driver;
@@ -41,24 +41,21 @@ public abstract class ParkSearchingBehaviour extends Behaviour {
 	@Override
 	public void action() {
 		if (parkingDestination == null) {
-			// check if utility is null
 			Entry<ParkingFacilityAgent, Double> mostUsefulDestination;
 			try {
 				mostUsefulDestination = getMostUsefulDestination(fullParkingFacilities);
 			} catch (NoValidDestinationException e) {
-				//Launcher.logger.log(Level.INFO, "No parking facility found.");
 				driver.doDelete();
 				return;
 			}
 
 			if (mostUsefulDestination.getValue() < 0) {
-				// driver leaves the system
-				// TODO: subtract utility from global value
-				//Launcher.logger.log(Level.INFO, "Negative utility value. Exiting system...");
 				driver.doDelete();
+				return;
 			}
 
 			parkingDestination = mostUsefulDestination.getKey();
+			destinationUtility = mostUsefulDestination.getValue();
 		}
 
 		GridPoint agentPosition = grid.getLocation(driver);
@@ -71,6 +68,7 @@ public abstract class ParkSearchingBehaviour extends Behaviour {
 			} else {
 				grid.moveTo(driver, parkingDestination.getLocation().getX(), parkingDestination.getLocation().getY());
 				parkingDestination.parkCar(driver);
+				driver.setUtility(destinationUtility);
 				this.done = true;
 			}
 		} else {

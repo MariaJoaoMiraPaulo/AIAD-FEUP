@@ -19,8 +19,8 @@ public class GuidedDriverBehaviour extends ParkSearchingBehaviour {
 	}
 
 	@Override
-	public Entry<ParkingFacilityAgent, Double> getMostUsefulDestination(
-			Set<ParkingFacilityAgent> fullParkingFacilities) throws NoValidDestinationException {
+	public Entry<ParkingFacilityAgent, Double> getMostUsefulDestination(Set<ParkingFacilityAgent> fullParkingFacilities)
+			throws NoValidDestinationException {
 
 		Map<ParkingFacilityAgent, Double> validFacilities = new HashMap<ParkingFacilityAgent, Double>();
 
@@ -33,7 +33,8 @@ public class GuidedDriverBehaviour extends ParkSearchingBehaviour {
 		return getMaxUtilityPark(validFacilities);
 	}
 
-	public Entry<ParkingFacilityAgent, Double> getMaxUtilityPark(Map<ParkingFacilityAgent, Double> parkingFacilities) throws NoValidDestinationException {
+	public Entry<ParkingFacilityAgent, Double> getMaxUtilityPark(Map<ParkingFacilityAgent, Double> parkingFacilities)
+			throws NoValidDestinationException {
 
 		Entry<ParkingFacilityAgent, Double> maxEntry = null;
 
@@ -43,7 +44,7 @@ public class GuidedDriverBehaviour extends ParkSearchingBehaviour {
 			}
 		}
 
-		if(maxEntry == null) {
+		if (maxEntry == null) {
 			throw new NoValidDestinationException();
 		}
 		return maxEntry;
