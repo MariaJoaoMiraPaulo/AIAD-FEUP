@@ -46,7 +46,7 @@ public abstract class ParkSearchingBehaviour extends Behaviour {
 			try {
 				mostUsefulDestination = getMostUsefulDestination(fullParkingFacilities);
 			} catch (NoValidDestinationException e) {
-				Launcher.logger.log(Level.INFO, "No parking facility found.");
+				//Launcher.logger.log(Level.INFO, "No parking facility found.");
 				driver.doDelete();
 				return;
 			}
@@ -54,7 +54,7 @@ public abstract class ParkSearchingBehaviour extends Behaviour {
 			if (mostUsefulDestination.getValue() < 0) {
 				// driver leaves the system
 				// TODO: subtract utility from global value
-				Launcher.logger.log(Level.INFO, "Negative utility value. Exiting system...");
+				//Launcher.logger.log(Level.INFO, "Negative utility value. Exiting system...");
 				driver.doDelete();
 			}
 
