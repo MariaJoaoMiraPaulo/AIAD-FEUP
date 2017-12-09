@@ -83,10 +83,10 @@ public class ParkingFacilityAgent extends Agent {
 			return priceToPay;
 		}
 		else if(parkOccupancy < 0.3) {
-			inflation = 1 - parkOccupancy;
+			inflation = 1 - (0.3 - parkOccupancy);
 		}
-		else {
-			inflation = 1 + parkOccupancy;
+		else { // park occupancy > 0.7
+			inflation = 1 + (parkOccupancy - 0.7);
 		}
 		
 		priceToPay = inflation * priceToPay;
