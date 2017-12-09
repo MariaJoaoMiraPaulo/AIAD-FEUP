@@ -58,7 +58,7 @@ public class GodBehaviour extends Behaviour {
 
 		generateAgents(getDayOfTheWeek(tickCount), getHour(tickCount));
 		
-		if(getHour(tickCount)==9.0 || getHour(tickCount)==16.00)
+		if(getHour(tickCount)==9.0 || getHour(tickCount)==16.00 || getHour(tickCount)==20.00)
 			updateStatisticsOccupacity(getHour(tickCount));
 		 
 	}
@@ -148,6 +148,8 @@ public class GodBehaviour extends Behaviour {
 	public void deleteDriver(DriverAgent driver) {
 		driver.doDelete();
 		currentDrivers--;
+		god.getStatistics().incrementDrivers();
+		god.getStatistics().sumUtility(driver.getUtilityForArrivingAtDestination());
 	}
 	
 	public void updateStatisticsOccupacity(double hour) {
