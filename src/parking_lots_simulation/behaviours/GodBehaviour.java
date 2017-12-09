@@ -57,6 +57,10 @@ public class GodBehaviour extends Behaviour {
 		int tickCount = (int) RunEnvironment.getInstance().getCurrentSchedule().getTickCount();
 
 		generateAgents(getDayOfTheWeek(tickCount), getHour(tickCount));
+		
+		if(getHour(tickCount)==9.0)
+			updateStatisticsOccupacity(getHour(tickCount));
+		 
 	}
 
 	/**
@@ -144,5 +148,14 @@ public class GodBehaviour extends Behaviour {
 	public void deleteDriver(DriverAgent driver) {
 		driver.doDelete();
 		currentDrivers--;
+	}
+	
+	public void updateStatisticsOccupacity(double hour) {
+
+		int parkIndex = 0;
+		for(ParkingFacilityAgent park : parkingFacilities){
+			god.getStatistics().updateMorningOccupation(parkIndex, park.getOccupancyPercentage(), park.getPricePerHour()); 
+			parkIndex ++;
+		}
 	}
 }
