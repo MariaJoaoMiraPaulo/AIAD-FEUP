@@ -50,8 +50,48 @@ public class ParkingFacilityAgent extends Agent {
 	public void parkCar(DriverAgent driverAgent) {
 		parkedCars.put(driverAgent.getId(), driverAgent);
 		driverAgent.setCurrentParkingFacility(this);
-		weeklyRevenue += (inflationParameter == 1) ? driverAgent.getDurationOfStay() * pricePerHour
+		
+		// Compute the price
+		weeklyRevenue += computePrice(driverAgent);
+	}
+	
+	/**
+	 * @return the occupancy percentage of the park
+	 */
+	public double getOccupancyPercentage() {
+		return (double)parkedCars.size() / (double)capacity;
+	}
+	
+	/**
+	 * Computes the price
+	 * @param driverAgent
+	 * @return price to pay
+	 */
+	public double computePrice(DriverAgent driverAgent) {
+		// Gets the price to pay
+		double priceToPay = (inflationParameter == 1) ? driverAgent.getDurationOfStay() * pricePerHour
 				: calculatePrice(driverAgent.getDurationOfStay(), pricePerHour);
+		
+		if(priceToPay > maxPricePerDay) {
+			priceToPay = maxPricePerDay;
+		}
+		
+		double parkOccupancy = getOccupancyPercentage(), inflation;
+		
+		// Verifying park occupancy to make inflation/deflation on price
+		if(parkOccupancy >= 0.3 && parkOccupancy <= 0.7) {
+			return priceToPay;
+		}
+		else if(parkOccupancy < 0.3) {
+			inflation = 1 - parkOccupancy;
+		}
+		else {
+			inflation = 1 + parkOccupancy;
+		}
+		
+		priceToPay = inflation * priceToPay;
+		
+		return priceToPay;
 	}
 	
 	/**

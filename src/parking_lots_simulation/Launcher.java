@@ -59,7 +59,7 @@ public class Launcher extends RepastSLauncher {
 	protected void launchJADE() {
 		parseParams();
 		currentSchedule = RunEnvironment.getInstance().getCurrentSchedule();
-
+		
 		Runtime rt = Runtime.instance();
 		Profile p1 = new ProfileImpl();
 		mainContainer = rt.createMainContainer(p1);

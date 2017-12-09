@@ -40,8 +40,6 @@ public class DynamicParkingFacilityBehaviour extends ParkRevenueBehaviour {
 			lastWeekRevenue = currentRevenue;
 		}
 		
-		System.out.println("Semana nº " + currentWeek);
-		
 		gamma = (currentRevenue == 0) ? 0 : currentRevenue / lastWeekRevenue;
 		
 		// If the parameter has been updated enough times, we need to pass to the next one and reset all variables
@@ -54,25 +52,21 @@ public class DynamicParkingFacilityBehaviour extends ParkRevenueBehaviour {
 		double newValue = 0, oldValue = 0;
 		switch(ARRAY_OF_PARAMETERS[currentParameterIndex % ARRAY_OF_PARAMETERS.length]) {
 			case PRICE_PER_HOUR:
-				System.out.println("Atualizando o preço por hora");
 				oldValue = parkingFacility.getPricePerHour();
 				newValue = parkingFacility.setPricePerHour(newParameterValue(oldValue));
 				break;
 			case MAX_PRICE_PER_DAY:
-				System.out.println("Atualizando o max preço por dia");
 				oldValue = parkingFacility.getMaxPricePerDay();
 				newValue = parkingFacility.setMaxPricePerDay(newParameterValue(oldValue));
 				break;
 			case INFLATION_RATE:
-				System.out.println("Atualizando a inflation rate");
 				oldValue = parkingFacility.getInflationParameter();
 				newValue = parkingFacility.setInflationParameter(newParameterValue(oldValue));
 				break;
 			default: 
 				break;
 		}
-		System.out.println("Old price: " + oldValue);
-		System.out.println("New price: " + newValue);
+		
 		// Update number of consecutive updates of a certain parameter
 		consecutiveUpdates++;
 		
