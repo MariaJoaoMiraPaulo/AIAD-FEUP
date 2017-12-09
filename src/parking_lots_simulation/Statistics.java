@@ -1,6 +1,4 @@
 package parking_lots_simulation;
-
-import repast.simphony.engine.environment.RunEnvironment;
 import parking_lots_simulation.GodAgent;
 
 public class Statistics {
@@ -74,8 +72,6 @@ public class Statistics {
 		guidedDrivers = 0;
 		explorerDrivers = 0;
 		TotalUtility = 0;
-		//Pauses Simulation 
-		//RunEnvironment.getInstance().pauseRun();
 	}
 	
 	public void addStatisticToGodAgent(GodAgent god) {
