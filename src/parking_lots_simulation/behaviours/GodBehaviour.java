@@ -92,7 +92,7 @@ public class GodBehaviour extends Behaviour {
 			String id = "GuidedDriver" + currentDriverId;
 
 			// Randomized from 7.5 to 8.5 hours. TODO: Change this according to day of week
-			double durationOfStay = 7.5 + driverRandomGenerator.nextInt();
+			double durationOfStay = 7.5 + driverRandomGenerator.nextInt(2);
 
 			GridPoint destination = generateRandomGridPoint();
 			DriverAgent guidedDriver = new GuidedDriverAgent(id, destination, durationOfStay);

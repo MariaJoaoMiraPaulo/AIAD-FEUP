@@ -66,7 +66,6 @@ public class DynamicParkingFacilityBehaviour extends ParkRevenueBehaviour {
 			default: 
 				break;
 		}
-		
 		// Update number of consecutive updates of a certain parameter
 		consecutiveUpdates++;
 		
