@@ -7,8 +7,10 @@ import sajas.wrapper.ContainerController;
 import java.util.Random;
 import java.util.Set;
 
+import it.geosolutions.jaiext.stats.Statistics;
 import jade.wrapper.StaleProxyException;
 import parking_lots_simulation.DriverAgent;
+import parking_lots_simulation.GodAgent;
 import parking_lots_simulation.Launcher;
 import parking_lots_simulation.ParkingFacilityAgent;
 import parking_lots_simulation.debug.ExplorerDriverAgent;
@@ -39,12 +41,15 @@ public class GodBehaviour extends Behaviour {
 	private Set<ParkingFacilityAgent> parkingFacilities;
 
 	private static int currentDriverId = 0;
+	
+	private GodAgent god;
 
-	public GodBehaviour(ContainerController mainContainer, Grid<Object> mainGrid,
+	public GodBehaviour(GodAgent god, ContainerController mainContainer, Grid<Object> mainGrid,
 			Set<ParkingFacilityAgent> parkingFacilities) {
 		this.mainContainer = mainContainer;
 		this.mainGrid = mainGrid;
 		this.parkingFacilities = parkingFacilities;
+		this.god = god;
 	}
 
 	@Override
@@ -85,6 +90,7 @@ public class GodBehaviour extends Behaviour {
 			mainGrid.moveTo(explorerDriver, start.getX(), start.getY());
 			currentDrivers++;
 			currentDriverId++;
+			god.getStatistics().incrementExplorerDrivers();
 		}
 
 		// create guided driver agents
@@ -113,6 +119,7 @@ public class GodBehaviour extends Behaviour {
 			mainGrid.moveTo(guidedDriver, start.getX(), start.getY());
 			currentDrivers++;
 			currentDriverId++;
+			god.getStatistics().incrementGuidedDrivers();
 		}
 	}
 
