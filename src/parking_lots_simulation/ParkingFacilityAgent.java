@@ -3,7 +3,6 @@ package parking_lots_simulation;
 import java.util.HashMap;
 import java.util.Map;
 
-import parking_lots_simulation.debug.StaticParkingFacilityAgent;
 import repast.simphony.space.grid.GridPoint;
 import sajas.core.Agent;
 
