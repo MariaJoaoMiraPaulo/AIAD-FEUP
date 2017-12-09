@@ -7,8 +7,10 @@ import sajas.wrapper.ContainerController;
 import java.util.Random;
 import java.util.Set;
 
+import it.geosolutions.jaiext.stats.Statistics;
 import jade.wrapper.StaleProxyException;
 import parking_lots_simulation.DriverAgent;
+import parking_lots_simulation.GodAgent;
 import parking_lots_simulation.Launcher;
 import parking_lots_simulation.ParkingFacilityAgent;
 import parking_lots_simulation.debug.ExplorerDriverAgent;
@@ -39,12 +41,15 @@ public class GodBehaviour extends Behaviour {
 	private Set<ParkingFacilityAgent> parkingFacilities;
 
 	private static int currentDriverId = 0;
+	
+	private GodAgent god;
 
-	public GodBehaviour(ContainerController mainContainer, Grid<Object> mainGrid,
+	public GodBehaviour(GodAgent god, ContainerController mainContainer, Grid<Object> mainGrid,
 			Set<ParkingFacilityAgent> parkingFacilities) {
 		this.mainContainer = mainContainer;
 		this.mainGrid = mainGrid;
 		this.parkingFacilities = parkingFacilities;
+		this.god = god;
 	}
 
 	@Override
@@ -52,6 +57,10 @@ public class GodBehaviour extends Behaviour {
 		int tickCount = (int) RunEnvironment.getInstance().getCurrentSchedule().getTickCount();
 
 		generateAgents(getDayOfTheWeek(tickCount), getHour(tickCount));
+		
+		if(getHour(tickCount)==9.0 || getHour(tickCount)==16.00 || getHour(tickCount)==20.00)
+			updateStatisticsOccupacity(getHour(tickCount));
+		 
 	}
 
 	/**
@@ -85,6 +94,7 @@ public class GodBehaviour extends Behaviour {
 			mainGrid.moveTo(explorerDriver, start.getX(), start.getY());
 			currentDrivers++;
 			currentDriverId++;
+			god.getStatistics().incrementExplorerDrivers();
 		}
 
 		// create guided driver agents
@@ -113,6 +123,7 @@ public class GodBehaviour extends Behaviour {
 			mainGrid.moveTo(guidedDriver, start.getX(), start.getY());
 			currentDrivers++;
 			currentDriverId++;
+			god.getStatistics().incrementGuidedDrivers();
 		}
 	}
 
@@ -137,5 +148,22 @@ public class GodBehaviour extends Behaviour {
 	public void deleteDriver(DriverAgent driver) {
 		driver.doDelete();
 		currentDrivers--;
+		god.getStatistics().sumUtility(driver.getUtilityForArrivingAtDestination());
+	}
+	
+	public void updateStatisticsOccupacity(double hour) {
+		int parkIndex = 0;
+		
+		for(ParkingFacilityAgent park : parkingFacilities){
+			
+			if(hour == 9.00)
+				god.getStatistics().updateMorningData(parkIndex, park.getOccupancyPercentage(), park.getPricePerHour()); 
+			if(hour == 16.00)
+				god.getStatistics().updateAfternoonData(parkIndex, park.getOccupancyPercentage(), park.getPricePerHour()); 
+			if(hour == 20.00)
+				god.getStatistics().updateNightData(parkIndex, park.getOccupancyPercentage(), park.getPricePerHour()); 
+				
+			parkIndex ++;
+		}
 	}
 }

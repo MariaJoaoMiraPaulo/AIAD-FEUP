@@ -1,5 +1,6 @@
 package parking_lots_simulation;
 
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -16,6 +17,7 @@ import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ISchedule;
+import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
@@ -26,12 +28,15 @@ import sajas.core.Runtime;
 import sajas.sim.repasts.RepastSLauncher;
 import sajas.wrapper.ContainerController;
 
-public class Launcher extends RepastSLauncher {
+
+
+public class Launcher extends RepastSLauncher  {
 
 	public static Logger logger = Logger.getGlobal();
 	public static int driverGenerationSeed;
 	private boolean showDynamicParks = true;
 	private ISchedule currentSchedule;
+	private Statistics statistics;
 	public static final int TICKS_IN_HOUR = 30;
 	public static final int DAYS_PER_WEEK = 7;
 	public static final int HOURS_PER_DAY = 24;
@@ -60,12 +65,19 @@ public class Launcher extends RepastSLauncher {
 		parseParams();
 		currentSchedule = RunEnvironment.getInstance().getCurrentSchedule();
 		
+		
 		Runtime rt = Runtime.instance();
 		Profile p1 = new ProfileImpl();
 		mainContainer = rt.createMainContainer(p1);
 
 		launchAgents();
+		
 		god = new GodAgent(mainContainer, mainGrid, parkingFacilities);
+		
+		statistics = new Statistics();
+		statistics.addStatisticToGodAgent(god);
+		ScheduleParameters  generate = ScheduleParameters.createRepeating(TICKS_IN_HOUR*HOURS_PER_DAY, TICKS_IN_HOUR*HOURS_PER_DAY);
+		currentSchedule.schedule(generate , this ,"printStatistics");
 
 		try {
 			mainContainer.acceptNewAgent("god", god).start();
@@ -207,5 +219,9 @@ public class Launcher extends RepastSLauncher {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void printStatistics() {
+		statistics.printStatistics(currentSchedule.getTickCount());
+	}
+	
 }
