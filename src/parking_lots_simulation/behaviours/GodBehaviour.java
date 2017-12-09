@@ -59,7 +59,10 @@ public class GodBehaviour extends Behaviour {
 		generateAgents(getDayOfTheWeek(tickCount), getHour(tickCount));
 		
 		if(getHour(tickCount)==9.0 || getHour(tickCount)==16.00 || getHour(tickCount)==20.00)
-			updateStatisticsOccupacity(getHour(tickCount));
+			updateOccupacityStatistics(getHour(tickCount));
+		
+		if(getDayOfTheWeek(tickCount) == 0)
+			updatePriceStatistics();
 		 
 	}
 
@@ -151,18 +154,27 @@ public class GodBehaviour extends Behaviour {
 		god.getStatistics().sumUtility(driver.getUtilityForArrivingAtDestination());
 	}
 	
-	public void updateStatisticsOccupacity(double hour) {
+	public void updateOccupacityStatistics(double hour) {
 		int parkIndex = 0;
 		
 		for(ParkingFacilityAgent park : parkingFacilities){
 			
 			if(hour == 9.00)
-				god.getStatistics().updateMorningData(parkIndex, park.getOccupancyPercentage(), park.getPricePerHour()); 
+				god.getStatistics().updateMorningData(parkIndex, park.getOccupancyPercentage()); 
 			if(hour == 16.00)
-				god.getStatistics().updateAfternoonData(parkIndex, park.getOccupancyPercentage(), park.getPricePerHour()); 
+				god.getStatistics().updateAfternoonData(parkIndex, park.getOccupancyPercentage()); 
 			if(hour == 20.00)
-				god.getStatistics().updateNightData(parkIndex, park.getOccupancyPercentage(), park.getPricePerHour()); 
+				god.getStatistics().updateNightData(parkIndex, park.getOccupancyPercentage()); 
 				
+			parkIndex ++;
+		}
+	}
+	
+	public void updatePriceStatistics() {
+		int parkIndex = 0;
+		for(ParkingFacilityAgent park : parkingFacilities){
+			god.getStatistics().updateinflationParameter(parkIndex, park.getInflationParameter());
+			god.getStatistics().updatePricePerHour(parkIndex, park.getPricePerHour());
 			parkIndex ++;
 		}
 	}
