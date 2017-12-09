@@ -3,23 +3,24 @@ package parking_lots_simulation;
 import java.util.HashMap;
 import java.util.Map;
 
+import parking_lots_simulation.debug.StaticParkingFacilityAgent;
 import repast.simphony.space.grid.GridPoint;
 import sajas.core.Agent;
 
-public class ParkingFacilityAgent extends Agent {
+public abstract class ParkingFacilityAgent extends Agent {
 	
 	private static final double MIN_INFLATION_RATE = 0.25;
 
-	private Map<String, DriverAgent> parkedCars = new HashMap<>();
-	private int capacity;
-	private double pricePerHour;
-	private double minPricePerHour;
-	private double maxPricePerDay;
-	private double minMaxPricePerDay;
-	private GridPoint location;
-	private double weeklyRevenue;
-	private String name;
-	private double inflationParameter;
+	protected Map<String, DriverAgent> parkedCars = new HashMap<>();
+	protected int capacity;
+	protected double pricePerHour;
+	protected double minPricePerHour;
+	protected double maxPricePerDay;
+	protected double minMaxPricePerDay;
+	protected GridPoint location;
+	protected double weeklyRevenue;
+	protected String name;
+	protected double inflationParameter;
 
 	public ParkingFacilityAgent(String name, GridPoint location, int capacity, double pricePerHour, double maxPricePerDay) {
 		this.location = location;
@@ -67,32 +68,7 @@ public class ParkingFacilityAgent extends Agent {
 	 * @param driverAgent
 	 * @return price to pay
 	 */
-	public double computePrice(DriverAgent driverAgent) {
-		// Gets the price to pay
-		double priceToPay = (inflationParameter == 1) ? driverAgent.getDurationOfStay() * pricePerHour
-				: calculatePrice(driverAgent.getDurationOfStay(), pricePerHour);
-		
-		if(priceToPay > maxPricePerDay) {
-			priceToPay = maxPricePerDay;
-		}
-		
-		double parkOccupancy = getOccupancyPercentage(), inflation;
-		
-		// Verifying park occupancy to make inflation/deflation on price
-		if(parkOccupancy >= 0.3 && parkOccupancy <= 0.7) {
-			return priceToPay;
-		}
-		else if(parkOccupancy < 0.3) {
-			inflation = 1 - (0.3 - parkOccupancy);
-		}
-		else { // park occupancy > 0.7
-			inflation = 1 + (parkOccupancy - 0.7);
-		}
-		
-		priceToPay = inflation * priceToPay;
-		
-		return priceToPay;
-	}
+	public abstract double computePrice(DriverAgent driverAgent);
 	
 	/**
 	 * Gets the price to pay in function of inflation. For example for a inflation rate of 1.10 and a price
