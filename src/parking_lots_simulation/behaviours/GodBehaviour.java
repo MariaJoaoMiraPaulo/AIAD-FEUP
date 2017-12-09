@@ -13,6 +13,9 @@ import parking_lots_simulation.Launcher;
 import parking_lots_simulation.ParkingFacilityAgent;
 import parking_lots_simulation.debug.ExplorerDriverAgent;
 import parking_lots_simulation.debug.GuidedDriverAgent;
+import parking_lots_simulation.population.PopulationCalculator;
+import parking_lots_simulation.population.WeekdayPopulationCalculator;
+import parking_lots_simulation.population.WeekendPopulationCalculator;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
@@ -22,13 +25,10 @@ public class GodBehaviour extends Behaviour {
 
 	public static final Random driverRandomGenerator = new Random(Launcher.driverGenerationSeed);
 
-	private static final double[] weekday = { 75, 75, 75, 80, 150, 215, 280, 275, 215, 200, 175, 180, 180, 170, 160,
-			150, 145, 140, 125, 70, 50, 50, 75, 50, 25 };
-
-	private static final double[] weekend = { 45, 50, 40, 40, 40, 45, 70, 160, 250, 215, 175, 150, 150, 150, 145, 110,
-			105, 105, 100, 75, 50, 30, 25, 15, 10 };
-
-	private static final double[][] week = { weekday, weekday, weekday, weekday, weekday, weekend, weekend };
+	private static final WeekdayPopulationCalculator weekdayCalc = new WeekdayPopulationCalculator();
+	private static final WeekendPopulationCalculator weekendCalc = new WeekendPopulationCalculator();
+	private static final PopulationCalculator[] week = { weekdayCalc, weekdayCalc, weekdayCalc, weekdayCalc,
+			weekdayCalc, weekendCalc, weekendCalc };
 
 	private int currentDrivers = 0;
 
@@ -51,7 +51,7 @@ public class GodBehaviour extends Behaviour {
 	public void action() {
 		int tickCount = (int) RunEnvironment.getInstance().getCurrentSchedule().getTickCount();
 
-		generateAgents(getDayOfTheWeek(tickCount), getHour(tickCount), getMinute(tickCount));
+		generateAgents(getDayOfTheWeek(tickCount), getHour(tickCount));
 	}
 
 	/**
@@ -59,8 +59,8 @@ public class GodBehaviour extends Behaviour {
 	 * @param dayOfTheWeek
 	 *            0 is monday, 1 is tuesday ... 6 is sunday
 	 */
-	private void generateAgents(int dayOfTheWeek, int hour, int minute) {
-		for (int i = 0; i < (week[dayOfTheWeek][hour] - currentDrivers) / 2; i++) {
+	private void generateAgents(int dayOfTheWeek, double hour) {
+		for (int i = 0; i < (week[dayOfTheWeek].calculate(hour) - currentDrivers) / 2; i++) {
 			String id = "ExplorerDriver" + currentDriverId;
 
 			// Randomized from 7.5 to 8.5 hours. TODO: Change this according to day of week
@@ -88,7 +88,7 @@ public class GodBehaviour extends Behaviour {
 		}
 
 		// create guided driver agents
-		for (int i = 0; i < week[dayOfTheWeek][hour] - currentDrivers; i++) {
+		for (int i = 0; i < week[dayOfTheWeek].calculate(hour) - currentDrivers; i++) {
 			String id = "GuidedDriver" + currentDriverId;
 
 			// Randomized from 7.5 to 8.5 hours. TODO: Change this according to day of week
@@ -120,12 +120,8 @@ public class GodBehaviour extends Behaviour {
 		return ((int) tickCount / Launcher.TICKS_IN_HOUR) / 24 % 7;
 	}
 
-	private int getHour(int tickCount) {
-		return ((int) tickCount / Launcher.TICKS_IN_HOUR) % 24;
-	}
-
-	private int getMinute(double tickCount) {
-		return (int) (60 * tickCount) / Launcher.TICKS_IN_HOUR % 60;
+	private double getHour(int tickCount) {
+		return (tickCount / Launcher.TICKS_IN_HOUR) % 24;
 	}
 
 	@Override
