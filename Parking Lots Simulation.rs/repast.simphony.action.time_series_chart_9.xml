@@ -1,9 +1,9 @@
 <repast.simphony.chart2.engine.TimeSeriesChartDescriptor simphonyVersion="2.5.0">
-  <name>Available Space</name>
-  <dataSet>Available space</dataSet>
+  <name>Park Revenue</name>
+  <dataSet>Park Revenue</dataSet>
   <xAxisLabel>Tick Count</xAxisLabel>
   <yAxisLabel></yAxisLabel>
-  <chartTitle>Available Space</chartTitle>
+  <chartTitle>Park Revenue</chartTitle>
   <type>TIME_SERIES</type>
   <background>
     <red>192</red>
@@ -21,9 +21,9 @@
   <showLegend>true</showLegend>
   <seriesIds>
     <entry>
-      <string>Available Space</string>
+      <string>Park Revenue</string>
       <SeriesData>
-        <label>Available Space</label>
+        <label>Park Revenue</label>
         <color>
           <red>0</red>
           <green>0</green>
@@ -34,5 +34,5 @@
     </entry>
   </seriesIds>
   <dataValueIds/>
-  <plotRangeLength>720</plotRangeLength>
+  <plotRangeLength>-1</plotRangeLength>
 </repast.simphony.chart2.engine.TimeSeriesChartDescriptor>

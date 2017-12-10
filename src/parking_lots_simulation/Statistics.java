@@ -1,7 +1,5 @@
 package parking_lots_simulation;
 
-import parking_lots_simulation.GodAgent;
-
 public class Statistics {
 
 	String[] weekDays = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
@@ -76,10 +74,6 @@ public class Statistics {
 		guidedDrivers = 0;
 		explorerDrivers = 0;
 		totalUtility = 0;
-	}
-
-	public void addStatisticToGodAgent(GodAgent god) {
-		god.addStatistics(this);
 	}
 
 	public void incrementExplorerDrivers() {

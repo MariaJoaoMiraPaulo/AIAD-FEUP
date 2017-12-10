@@ -10,29 +10,37 @@ public class DriverAgent extends Agent {
 
 	private GridPoint destination;
 	private String id;
+	
+	/**
+	 * Duration of stay in hours.
+	 */
 	private double durationOfStay;
 
-	/*
+	/**
 	 * The parking facility the driver is currently parked in. Null if the agent is
 	 * not parked.
 	 */
 	private ParkingFacilityAgent currentParkingFacility;
 
-	/*
+	/**
 	 * Emphasis of agent on paying a certain amount of money
 	 */
 	private double paymentEmphasis;
 
-	/*
+	/**
 	 * Emphasis of agent on walking a certain distance
 	 */
 	private double walkDistanceEmphasis;
 
-	/*
+	/**
 	 * Utility the driver gets for arriving at its destination
 	 */
 	private double utilityForArrivingAtDestination;
 
+	/**
+	 * The utility of the current park. Only applicable if the car is parked.
+	 * Otherwise, it will be the value of not finding a useful park.
+	 */
 	private double currentUtility = -10000;
 
 	public DriverAgent(String id, GridPoint destination, double durationOfStay) {

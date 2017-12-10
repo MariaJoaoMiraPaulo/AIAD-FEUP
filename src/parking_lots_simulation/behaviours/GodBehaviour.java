@@ -3,6 +3,7 @@ package parking_lots_simulation.behaviours;
 import java.util.Random;
 import java.util.Set;
 
+import cern.jet.random.Normal;
 import jade.wrapper.StaleProxyException;
 import parking_lots_simulation.DriverAgent;
 import parking_lots_simulation.GodAgent;
@@ -14,6 +15,7 @@ import parking_lots_simulation.population.PopulationCalculator;
 import parking_lots_simulation.population.WeekdayPopulationCalculator;
 import parking_lots_simulation.population.WeekendPopulationCalculator;
 import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.random.RandomHelper;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 import sajas.core.behaviours.Behaviour;
@@ -42,12 +44,16 @@ public class GodBehaviour extends Behaviour {
 
 	private GodAgent god;
 
+	private Normal normalDistribution;
+
 	public GodBehaviour(GodAgent god, ContainerController mainContainer, Grid<Object> mainGrid,
 			Set<ParkingFacilityAgent> parkingFacilities) {
 		this.mainContainer = mainContainer;
 		this.mainGrid = mainGrid;
 		this.parkingFacilities = parkingFacilities;
 		this.god = god;
+		RandomHelper.setSeed(Launcher.driverGenerationSeed);
+		normalDistribution = RandomHelper.createNormal(8, 2.5);
 	}
 
 	@Override
@@ -74,7 +80,8 @@ public class GodBehaviour extends Behaviour {
 			String id = "ExplorerDriver" + currentDriverId;
 
 			// Randomized from 7.5 to 8.5 hours. TODO: Change this according to day of week
-			double durationOfStay = 7.5 + driverRandomGenerator.nextInt(2);
+			double durationOfStay = getRandomDurationOfStay();
+			System.out.println(currentDriverId + ": " + durationOfStay);
 
 			GridPoint destination = generateRandomGridPoint();
 			DriverAgent explorerDriver = new ExplorerDriverAgent(id, destination, durationOfStay);
@@ -103,7 +110,8 @@ public class GodBehaviour extends Behaviour {
 			String id = "GuidedDriver" + currentDriverId;
 
 			// Randomized from 7.5 to 8.5 hours.
-			double durationOfStay = 7.5 + driverRandomGenerator.nextInt(2);
+			double durationOfStay = getRandomDurationOfStay();
+			System.out.println(currentDriverId + ": " + durationOfStay);
 
 			GridPoint destination = generateRandomGridPoint();
 			DriverAgent guidedDriver = new GuidedDriverAgent(id, destination, durationOfStay);
@@ -126,6 +134,15 @@ public class GodBehaviour extends Behaviour {
 			currentDriverId++;
 			god.getStatistics().incrementGuidedDrivers();
 		}
+	}
+
+	private double getRandomDurationOfStay() {
+		double ret;
+		do {
+			ret = normalDistribution.nextDouble();
+		} while (ret <= 0);
+
+		return ret;
 	}
 
 	private int getDayOfTheWeek(int tickCount) {
