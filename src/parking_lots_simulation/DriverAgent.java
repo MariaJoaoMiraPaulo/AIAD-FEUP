@@ -6,7 +6,7 @@ import sajas.core.Agent;
 
 public class DriverAgent extends Agent {
 	public static final double alpha = 1;
-	public static final double beta = 1;
+	public static final double beta = 0.5;
 
 	private GridPoint destination;
 	private String id;

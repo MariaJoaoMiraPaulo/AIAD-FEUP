@@ -11,7 +11,6 @@ public class DynamicParkingFacilityBehaviour extends ParkRevenueBehaviour {
 
 	private static final long serialVersionUID = -8556683381412545535L;
 	private static final double DELTA = 0.3;
-	private static final int FIRST_WEEK = 0;
 	private static final int NUMBER_OF_CONSECUTIVE_UPDATES = 5;
 	private static final Parameter[] PARAMETERS = { Parameter.PRICE_PER_HOUR, Parameter.MAX_PRICE_PER_DAY,
 			Parameter.INFLATION_RATE };
@@ -21,7 +20,7 @@ public class DynamicParkingFacilityBehaviour extends ParkRevenueBehaviour {
 	 * increased (or maintained) the parameter value. Otherwise, it is -1.
 	 */
 	private int calculationModifier;
-	private double lastWeekRevenue;
+	private double lastWeekRevenue = 0;
 	private double gamma;
 	private int consecutiveUpdates;
 	private int currentParameterIndex;
@@ -37,12 +36,7 @@ public class DynamicParkingFacilityBehaviour extends ParkRevenueBehaviour {
 
 	@Override
 	public void updateValues(int currentWeek, double currentRevenue) {
-
-		if (currentWeek == FIRST_WEEK) {
-			lastWeekRevenue = currentRevenue;
-		}
-
-		gamma = (currentRevenue == 0) ? 0 : currentRevenue / lastWeekRevenue;
+		gamma = (lastWeekRevenue == 0) ? 1 : currentRevenue / lastWeekRevenue;
 
 		// If the parameter has been updated enough times, we need to pass to the next
 		// one and reset all variables
@@ -56,15 +50,15 @@ public class DynamicParkingFacilityBehaviour extends ParkRevenueBehaviour {
 		switch (PARAMETERS[currentParameterIndex % PARAMETERS.length]) {
 		case PRICE_PER_HOUR:
 			oldValue = parkingFacility.getPricePerHour();
-			newValue = parkingFacility.setPricePerHour(calculateParamater(oldValue));
+			newValue = parkingFacility.setPricePerHour(calculateParameter(oldValue));
 			break;
 		case MAX_PRICE_PER_DAY:
 			oldValue = parkingFacility.getMaxPricePerDay();
-			newValue = parkingFacility.setMaxPricePerDay(calculateParamater(oldValue));
+			newValue = parkingFacility.setMaxPricePerDay(calculateParameter(oldValue));
 			break;
 		case INFLATION_RATE:
 			oldValue = parkingFacility.getInflationParameter();
-			newValue = parkingFacility.setInflationParameter(calculateParamater(oldValue));
+			newValue = parkingFacility.setInflationParameter(calculateParameter(oldValue));
 			break;
 		default:
 			break;
@@ -78,7 +72,7 @@ public class DynamicParkingFacilityBehaviour extends ParkRevenueBehaviour {
 		lastWeekRevenue = currentRevenue;
 	}
 
-	public double calculateParamater(double currentParameter) {
+	public double calculateParameter(double currentParameter) {
 		return currentParameter + calculationModifier * DELTA * currentParameter * (gamma - 1);
 	}
 }
