@@ -11,6 +11,7 @@ import parking_lots_simulation.behaviours.DynamicParkingFacilityBehaviour;
 import parking_lots_simulation.behaviours.StaticParkingFacilityBehaviour;
 import parking_lots_simulation.debug.DynamicParkingFacilityAgent;
 import parking_lots_simulation.debug.StaticParkingFacilityAgent;
+import parking_lots_simulation.population.PopulationCalculator;
 import repast.simphony.context.Context;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
@@ -83,7 +84,8 @@ public class Launcher extends RepastSLauncher {
 
 	private void parseParams() {
 		Parameters params = RunEnvironment.getInstance().getParameters();
-		driverGenerationSeed = params.getInteger("driverGenerationSeed");
+		driverGenerationSeed = params.getInteger("randomSeed");
+		PopulationCalculator.POPULATION_MODIFIER = params.getDouble("populationModifier");
 		showDynamicParks = params.getBoolean("showDynamicParks");
 	}
 

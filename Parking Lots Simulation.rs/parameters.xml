@@ -12,10 +12,10 @@
 						converter="repast.simphony.parameter.StringConverterFactory$BooleanConverter"
 									
 		/>
-				<parameter name="driverGenerationSeed" displayName="Driver Generation Seed" type="int" 
-						defaultValue="755585935" 
+				<parameter name="populationModifier" displayName="Population Modifier" type="double" 
+						defaultValue="1.0" 
 						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
 		</parameters>

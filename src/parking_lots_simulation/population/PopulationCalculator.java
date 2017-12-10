@@ -1,5 +1,7 @@
 package parking_lots_simulation.population;
 
-public interface PopulationCalculator {
-	public double calculate(double x);
+public abstract class PopulationCalculator {
+	public static double POPULATION_MODIFIER = 1;
+	
+	public abstract double calculate(double x);
 }
