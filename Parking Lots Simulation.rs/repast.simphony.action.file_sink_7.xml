@@ -7,6 +7,6 @@
     <string>Utility</string>
     <string>tick</string>
   </sourceIds>
-  <fileName>Utility.txt</fileName>
+  <fileName>exp3/run1/utility_static_0.3.txt</fileName>
   <addTimeStamp>true</addTimeStamp>
 </repast.simphony.data2.engine.FileSinkDescriptor>
