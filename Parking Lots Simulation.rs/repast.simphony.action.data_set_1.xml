@@ -21,7 +21,7 @@
         <id>Utility</id>
         <className>parking_lots_simulation.DriverAgent</className>
         <methodName>getUtilityForArrivingAtDestination</methodName>
-        <aggType>MEAN</aggType>
+        <aggType>SUM</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>
