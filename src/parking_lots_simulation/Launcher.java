@@ -16,6 +16,7 @@ import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ISchedule;
+import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
@@ -71,6 +72,8 @@ public class Launcher extends RepastSLauncher {
 
 		statistics = new Statistics();
 		god.addStatistics(statistics);
+		ScheduleParameters  generate = ScheduleParameters.createRepeating(TICKS_IN_HOUR*HOURS_PER_DAY, TICKS_IN_HOUR*HOURS_PER_DAY); 
+	    currentSchedule.schedule(generate , this ,"printStatistics"); 
 		try {
 			mainContainer.acceptNewAgent("god", god).start();
 		} catch (StaleProxyException e) {
