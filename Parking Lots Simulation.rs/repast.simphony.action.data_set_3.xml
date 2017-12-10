@@ -1,26 +1,26 @@
 <repast.simphony.data2.engine.DataSetDescriptor simphonyVersion="2.5.0">
-  <name>Park Revenue</name>
+  <name>Available space</name>
   <type>AGGREGATE</type>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
   <inclRandomSeed>false</inclRandomSeed>
   <scheduleParams>
     <start>1.0</start>
-    <interval>5038.0</interval>
+    <interval>15.0</interval>
     <priority>-Infinity</priority>
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>1941200969</hashCode>
+    <hashCode>-2136868033</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>Park Revenue</string>
+      <string>Available Space</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>Park Revenue</id>
+        <id>Available Space</id>
         <className>parking_lots_simulation.ParkingFacilityAgent</className>
-        <methodName>getWeeklyRevenue</methodName>
+        <methodName>getAvailableParkingSpaces</methodName>
         <aggType>MEAN</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
