@@ -86,6 +86,7 @@ public class Launcher extends RepastSLauncher {
 		Parameters params = RunEnvironment.getInstance().getParameters();
 		driverGenerationSeed = params.getInteger("randomSeed");
 		PopulationCalculator.POPULATION_MODIFIER = params.getDouble("populationModifier");
+		ParkingFacilityAgent.PARK_CAPACITY_MODIFIER = params.getDouble("parkCapacityModifier");
 		showDynamicParks = params.getBoolean("showDynamicParks");
 	}
 

@@ -9,6 +9,7 @@ import sajas.core.Agent;
 public abstract class ParkingFacilityAgent extends Agent {
 	
 	private static final double MIN_INFLATION_RATE = 0.25;
+	public static double PARK_CAPACITY_MODIFIER = 1;
 
 	protected Map<String, DriverAgent> parkedCars = new HashMap<>();
 	protected int capacity;
@@ -23,7 +24,7 @@ public abstract class ParkingFacilityAgent extends Agent {
 
 	public ParkingFacilityAgent(String name, GridPoint location, int capacity, double pricePerHour, double maxPricePerDay) {
 		this.location = location;
-		this.capacity = capacity;
+		this.capacity = (int)(capacity * PARK_CAPACITY_MODIFIER);
 		this.pricePerHour = pricePerHour;
 		this.minPricePerHour = this.pricePerHour/2;
 		this.maxPricePerDay = maxPricePerDay;
