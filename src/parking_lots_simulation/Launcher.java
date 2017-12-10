@@ -214,4 +214,8 @@ public class Launcher extends RepastSLauncher {
 			e.printStackTrace();
 		}
 	}
+	
+	  public void printStatistics() { 
+		    statistics.printStatistics(currentSchedule.getTickCount()); 
+		  } 
 }
