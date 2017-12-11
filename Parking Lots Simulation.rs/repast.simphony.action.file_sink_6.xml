@@ -1,10 +1,10 @@
 <repast.simphony.data2.engine.FileSinkDescriptor simphonyVersion="2.5.0">
-  <name>Park Revenue</name>
-  <dataSet>Park Revenue</dataSet>
+  <name>Utility</name>
+  <dataSet>Utility</dataSet>
   <delimiter>,</delimiter>
   <format>TABULAR</format>
   <sourceIds class="linked-hash-set">
-    <string>Park Revenue</string>
+    <string>Utility</string>
     <string>tick</string>
   </sourceIds>
   <fileName>exp3/run1/park_revenue_static_0.3.txt</fileName>
